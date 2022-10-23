@@ -16,20 +16,17 @@ public class TimeUnitConfig {
 
             List<TimeUnit> units = new ArrayList<TimeUnit>();
 
-            for(String s: List.of(  "MINUTE",
-                                    "HOUR",
-                                    "DAY",
-                                    "WEEK",
-                                    "MONTH",
-                                    "QUARTER",
-                                    "YEAR"
-                                )) {
-                TimeUnit unit = new TimeUnit(s, "N/A");
-                units.add(unit);
-            }
+            units.add(new TimeUnit("HOUR", "N/A", 1, "HOURS"));
+            units.add(new TimeUnit("DAY", "N/A", 24, "DAYS"));
+            units.add(new TimeUnit("WEEK", "N/A", 168, "DAYS"));
+            units.add(new TimeUnit("MONTH", "N/A", 720, "DAYS"));
+            units.add(new TimeUnit("QUARTER", "N/A", 2184, "DAYS"));
+            units.add(new TimeUnit("YEAR", "N/A", 8760, "DAYS"));
+            
             
             repository.saveAll(units);
         };
     }
     
 }
+

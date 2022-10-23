@@ -47,10 +47,10 @@ public class TimeUnitService {
     }
 
     @Transactional
-    public void updateTimeUnit(Long typeId, String value, String description) {
-        TimeUnit timeUnit = timeUnitRepository.findById(typeId)
+    public void updateTimeUnit(Long unitId, String value, String description, Integer units, String unitType) {
+        TimeUnit timeUnit = timeUnitRepository.findById(unitId)
             .orElseThrow(() -> new IllegalStateException(
-                "TimeUnit with ID " + typeId + " does not exist")
+                "TimeUnit with ID " + unitId + " does not exist")
             );
 
         if (value != null &&
@@ -65,6 +65,26 @@ public class TimeUnitService {
             !Objects.equals(timeUnit.getDescription(), description)) {
                 timeUnit.setDescription(description);
             }
+        if (unitType == "HOURS" ||
+            unitType == "DAYS" &&
+            !Objects.equals(timeUnit.getUnitType(), unitType)) {
+                timeUnit.setUnitType(unitType);
+            } 
+        else {
+            throw new IllegalStateException("Unit type must be either HOURS or DAYS.");
+        }
+        if (units != null &&
+            units > 0 &&
+            !Objects.equals(timeUnit.getHours(), units)) {
+                if (unitType == "DAYS") {
+                    timeUnit.setDays(units);
+                }
+                else {
+                    timeUnit.setHours(units);
+                }
+            }
+        
+        
     }
 
     

@@ -48,7 +48,7 @@ public class TimeUnitController {
     public ResponseEntity<?> updateTimeUnit(
             @PathVariable("unitId") Long unitId,
             @RequestBody TimeUnit timeUnit) {
-        timeUnitService.updateTimeUnit(unitId, timeUnit.getValue(), timeUnit.getDescription());
+        timeUnitService.updateTimeUnit(unitId, timeUnit.getValue(), timeUnit.getDescription(), timeUnit.getHours(), timeUnit.getUnitType());
         return ResponseEntity.ok(timeUnit);
     }
 }
