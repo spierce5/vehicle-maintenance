@@ -22,6 +22,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  DialogContentText,
   DialogActions,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -43,11 +44,15 @@ class Options extends Component {
         description: "",
       },
       newValue: false,
+      deleteDialogOpen: false,
     };
+    this.getValueId = this.getValueId.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.openEditor = this.openEditor.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   async componentDidMount() {
@@ -57,6 +62,17 @@ class Options extends Component {
     fetch("/api/task-types")
       .then((response) => response.json())
       .then((data) => this.setState({ taskTypes: data }));
+  }
+
+  getValueId(value) {
+    switch (value) {
+      case "task-types":
+        return "typeId";
+      case "time-units":
+        return "unitId";
+      default:
+        return "typeId";
+    }
   }
 
   handleClick(event) {
@@ -96,7 +112,48 @@ class Options extends Component {
       },
       body: JSON.stringify(item),
     });
-    this.props.history.push("/tasks");
+    this.props.history.push("/" + this.currentObjectSelection);
+  }
+
+  async remove(id) {
+    let listName = this.state.currentObjectSelection
+      .replace(/(-\w{1})/g, (l) => l.toUpperCase())
+      .replace("-", "");
+    await fetch(`/api/` + this.state.currentObjectSelection + `/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }).then(() => {
+      let updatedValues = [...this.state[listName]].filter(
+        (i) => i[this.getValueId(this.state.currentObjectSelection)] !== id
+      );
+      let newListObject = {};
+      newListObject[listName] = updatedValues;
+      this.setState(newListObject);
+      console.log(this.state[listName]);
+    });
+  }
+
+  handleDialogClose(choice) {
+    if (choice === "DELETE") {
+      this.remove(
+        this.state.currentValue[
+          this.getValueId(this.state.currentObjectSelection)
+        ]
+      );
+    }
+    this.setState({
+      deleteDialogOpen: false,
+    });
+  }
+
+  handleDelete(object) {
+    const newState = { ...this.state };
+    newState["currentValue"] = object;
+    newState["deleteDialogOpen"] = true;
+    this.setState(newState);
   }
 
   render() {
@@ -247,6 +304,38 @@ class Options extends Component {
               </Button>
               <Button onClick={() => this.setState({ editorOpen: false })}>
                 Save
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={this.state.deleteDialogOpen}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Are you sure you want to delete this task?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {this.state.deleteDialogOpen ? (
+                  <p>
+                    Value: {this.state.currentValue.value} <br />
+                    Description: {this.state.currentValue.description} <br />
+                  </p>
+                ) : (
+                  ""
+                )}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => this.handleDialogClose("CANCEL")}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => this.handleDialogClose("DELETE")}
+                autoFocus
+              >
+                Delete
               </Button>
             </DialogActions>
           </Dialog>
