@@ -1,11 +1,12 @@
 .main {
   background-color: #3f51b5;
   display: grid;
-  grid-template-columns: 25vw 75vw;
-  grid-template-rows: 30vh 70vh;
+  grid-template-columns: 20vw 20vw 20vw 20vw 20vw;
+  grid-template-rows: 20vh 60vh 20vh;
   grid-template-areas:
-    "header header"
-    "section-list .";
+    "header header header header header"
+    ". section-list  section-list section-list ."
+    ". . . . .";
   width: 100vw;
   height: 100vh;
 }
@@ -16,4 +17,26 @@
 
 .section-list {
   grid-area: section-list;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.bottom-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.vehicles {
+  grid-area: vehicles;
+}
+
+.tasks {
+  grid-area: tasks;
+}
+
+.schedules {
+  grid-area: schedules;
 }

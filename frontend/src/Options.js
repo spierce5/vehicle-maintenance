@@ -24,6 +24,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
@@ -42,6 +44,8 @@ class Options extends Component {
       currentValue: {
         value: "",
         description: "",
+        units: 0,
+        unitType: "",
       },
       newValue: false,
       deleteDialogOpen: false,
@@ -98,6 +102,7 @@ class Options extends Component {
     let currentValue = { ...this.state.currentValue };
     currentValue[name] = value;
     this.setState({ currentValue });
+    console.log(this.state.currentValue);
   }
 
   async handleSubmit(event) {
@@ -183,6 +188,18 @@ class Options extends Component {
         <TableRow key={value[valueId()]}>
           <TableCell style={{ whiteSpace: "nowrap" }}>{value.value}</TableCell>
           <TableCell>{value.description}</TableCell>
+          <TableCell
+            sx={{
+              visibility:
+                this.state.currentObjectSelection === "time-units"
+                  ? "visible"
+                  : "hidden",
+            }}
+          >
+            {value.unitType === "DAYS"
+              ? value.days + " Day(s)"
+              : value.hours + " Hour(s)"}
+          </TableCell>
           <TableCell>
             <ButtonGroup>
               <IconButton
@@ -253,11 +270,38 @@ class Options extends Component {
                 <Table className="mt-4">
                   <TableHead>
                     <TableRow>
-                      <TableCell width="40%">
+                      <TableCell
+                        width={
+                          this.state.currentObjectSelection === "time-units"
+                            ? "30%"
+                            : "40%"
+                        }
+                      >
                         <b>Value</b>
                       </TableCell>
-                      <TableCell width="50%">
+                      <TableCell
+                        width={
+                          this.state.currentObjectSelection === "time-units"
+                            ? "30%"
+                            : "50%"
+                        }
+                      >
                         <b>Description</b>
+                      </TableCell>
+                      <TableCell
+                        width={
+                          this.state.currentObjectSelection === "time-units"
+                            ? "30%"
+                            : "0%"
+                        }
+                        sx={{
+                          visibility:
+                            this.state.currentObjectSelection === "time-units"
+                              ? "visible"
+                              : "hidden",
+                        }}
+                      >
+                        <b>Time Frame</b>
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -269,6 +313,8 @@ class Options extends Component {
           <Dialog
             open={this.state.editorOpen}
             onClose={() => this.setState({ editorOpen: false })}
+            maxWidth="sm"
+            fullWidth={true}
           >
             <DialogTitle>
               {this.state.newValue
@@ -276,27 +322,52 @@ class Options extends Component {
                 : "Edit"}
             </DialogTitle>
             <DialogContent>
-              <TextField
-                margin="dense"
-                id="value"
-                name="value"
-                label="Value"
-                value={this.state.currentValue.value || ""}
-                onChange={this.handleChange}
-                fullWidth
-                variant="outlined"
-              />
-              <TextField
-                margin="dense"
-                id="description"
-                name="description"
-                label="Description"
-                value={this.state.currentValue.description || ""}
-                onChange={this.handleChange}
-                multiline
-                fullWidth
-                variant="outlined"
-              />
+              <Stack direction="column">
+                <TextField
+                  margin="dense"
+                  id="value"
+                  name="value"
+                  label="Value"
+                  value={this.state.currentValue.value || ""}
+                  onChange={this.handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+                <TextField
+                  margin="dense"
+                  id="description"
+                  name="description"
+                  label="Description"
+                  value={this.state.currentValue.description || ""}
+                  onChange={this.handleChange}
+                  multiline
+                  fullWidth
+                  variant="outlined"
+                />
+                <ToggleButtonGroup
+                  color="primary"
+                  value={this.state.currentValue.unitType}
+                  exclusive
+                  onChange={this.handleChange}
+                  name="unitType"
+                >
+                  <ToggleButton name="unitType" value="HOURS">
+                    Hours
+                  </ToggleButton>
+                  <ToggleButton name="unitType" value="DAYS">
+                    Days
+                  </ToggleButton>
+                </ToggleButtonGroup>
+                <TextField
+                  margin="dense"
+                  id="units"
+                  name="units"
+                  label="Units"
+                  value={this.state.currentValue.units || ""}
+                  onChange={this.handleChange}
+                  variant="outlined"
+                />
+              </Stack>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => this.setState({ editorOpen: false })}>
