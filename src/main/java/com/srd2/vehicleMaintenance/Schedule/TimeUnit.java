@@ -20,6 +20,7 @@ public class TimeUnit {
      * If unit type is days, the number of days will be converted on the frontend to hours and vice-versa for display. 
      */
     private Integer hours;
+    private Integer days;
     private String unitType;
 
     public TimeUnit() {
@@ -30,6 +31,11 @@ public class TimeUnit {
         this.description = description;
         this.hours = hours;
         this.unitType = unitType;
+        if (unitType == "DAYS"){
+            this.days = getDays();
+        } else {
+            this.days = 0;
+        }
     }
 
     public Long getUnitId() {
