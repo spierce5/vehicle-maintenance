@@ -108,16 +108,21 @@ class Options extends Component {
   async handleSubmit(event) {
     /* TODO:  Rewrite for task types and time units */
     event.preventDefault();
-    const { item } = this.state;
-    await fetch("/api/tasks" + (item.taskId ? "/" + item.taskId : ""), {
-      method: item.taskId ? "PUT" : "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(item),
-    });
+    const { currentValue } = this.state;
+    await fetch(
+      "/api/time-units" +
+        (currentValue.unitId ? "/" + currentValue.unitId : ""),
+      {
+        method: currentValue.unitId ? "PUT" : "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentValue),
+      }
+    );
     this.props.history.push("/" + this.currentObjectSelection);
+    this.setState({ editorOpen: false });
   }
 
   async remove(id) {
@@ -183,39 +188,63 @@ class Options extends Component {
           return "typeId";
       }
     };
+
+    const headerRow = () => {
+      return (
+        <TableRow>
+          <TableCell
+            width={
+              this.state.currentObjectSelection === "time-units" ? "30%" : "40%"
+            }
+          >
+            <b>Value</b>
+          </TableCell>
+          <TableCell
+            width={
+              this.state.currentObjectSelection === "time-units" ? "30%" : "50%"
+            }
+          >
+            <b>Description</b>
+          </TableCell>
+          {this.state.currentObjectSelection === "time-units" && (
+            <TableCell width="30%">
+              <b>Time Frame</b>
+            </TableCell>
+          )}
+        </TableRow>
+      );
+    };
+
     const valueList = values.map((value) => {
       return (
         <TableRow key={value[valueId()]}>
           <TableCell style={{ whiteSpace: "nowrap" }}>{value.value}</TableCell>
           <TableCell>{value.description}</TableCell>
-          <TableCell
-            sx={{
-              visibility:
-                this.state.currentObjectSelection === "time-units"
-                  ? "visible"
-                  : "hidden",
-            }}
-          >
-            {value.unitType === "DAYS"
-              ? value.days + " Day(s)"
-              : value.hours + " Hour(s)"}
-          </TableCell>
-          <TableCell>
-            <ButtonGroup>
-              <IconButton
-                color="success"
-                onClick={() => this.openEditor(value, "EDIT")}
-              >
-                <ModeEditIcon />
-              </IconButton>
-              <IconButton
-                color="error"
-                onClick={() => this.handleDelete(value)}
-              >
-                <DeleteForeverIcon />
-              </IconButton>
-            </ButtonGroup>
-          </TableCell>
+          {this.state.currentObjectSelection === "time-units" && (
+            <TableCell>
+              {value.unitType === "DAYS"
+                ? value.days + " Day(s)"
+                : value.hours + " Hour(s)"}
+            </TableCell>
+          )}
+          {this.state.currentObjectSelection === "task-types" && (
+            <TableCell>
+              <ButtonGroup>
+                <IconButton
+                  color="success"
+                  onClick={() => this.openEditor(value, "EDIT")}
+                >
+                  <ModeEditIcon />
+                </IconButton>
+                <IconButton
+                  color="error"
+                  onClick={() => this.handleDelete(value)}
+                >
+                  <DeleteForeverIcon />
+                </IconButton>
+              </ButtonGroup>
+            </TableCell>
+          )}
         </TableRow>
       );
     });
@@ -259,52 +288,18 @@ class Options extends Component {
             <Container maxWidth="md">
               <Stack direction="row">
                 {detailHeader}
-                <IconButton
-                  color="success"
-                  onClick={() => this.openEditor({}, "NEW")}
-                >
-                  <AddIcon />
-                </IconButton>
+                {this.state.currentObjectSelection !== "time-units" && (
+                  <IconButton
+                    color="success"
+                    onClick={() => this.openEditor({}, "NEW")}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                )}
               </Stack>
               <TableContainer>
                 <Table className="mt-4">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell
-                        width={
-                          this.state.currentObjectSelection === "time-units"
-                            ? "30%"
-                            : "40%"
-                        }
-                      >
-                        <b>Value</b>
-                      </TableCell>
-                      <TableCell
-                        width={
-                          this.state.currentObjectSelection === "time-units"
-                            ? "30%"
-                            : "50%"
-                        }
-                      >
-                        <b>Description</b>
-                      </TableCell>
-                      <TableCell
-                        width={
-                          this.state.currentObjectSelection === "time-units"
-                            ? "30%"
-                            : "0%"
-                        }
-                        sx={{
-                          visibility:
-                            this.state.currentObjectSelection === "time-units"
-                              ? "visible"
-                              : "hidden",
-                        }}
-                      >
-                        <b>Time Frame</b>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
+                  <TableHead>{headerRow()}</TableHead>
                   <TableBody>{valueList}</TableBody>
                 </Table>
               </TableContainer>
@@ -361,9 +356,17 @@ class Options extends Component {
                 <TextField
                   margin="dense"
                   id="units"
-                  name="units"
+                  name={
+                    this.state.currentValue.unitType === "DAYS"
+                      ? "days"
+                      : "hours"
+                  }
                   label="Units"
-                  value={this.state.currentValue.units || ""}
+                  value={
+                    this.state.currentValue.unitType === "DAYS"
+                      ? this.state.currentValue.days
+                      : this.state.currentValue.hours || ""
+                  }
                   onChange={this.handleChange}
                   variant="outlined"
                 />
@@ -373,9 +376,7 @@ class Options extends Component {
               <Button onClick={() => this.setState({ editorOpen: false })}>
                 Cancel
               </Button>
-              <Button onClick={() => this.setState({ editorOpen: false })}>
-                Save
-              </Button>
+              <Button onClick={(e) => this.handleSubmit(e)}>Save</Button>
             </DialogActions>
           </Dialog>
           <Dialog
