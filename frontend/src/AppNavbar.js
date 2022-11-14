@@ -13,12 +13,12 @@ export default class AppNavbar extends Component {
   render() {
     return (
       <Box sx={{ flexGrow: 1, width: "100vw" }}>
-        <AppBar position="static" color="inherit">
-          <Toolbar>
+        <AppBar position="static" sx={{ backgroundColor: "#424242" }}>
+          <Toolbar variant="dense">
             <Button color="inherit" component={Link} to="/">
               Home
             </Button>
-            <Tooltip title="Options" placement="bottom" arrow="true">
+            <Tooltip title="Options" placement="bottom" arrow={true}>
               <IconButton color="inherit" component={Link} to="/options">
                 <SettingsIcon />
               </IconButton>

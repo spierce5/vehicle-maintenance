@@ -1,34 +1,24 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import "./App.css";
 import "./Home.css";
 import AppNavbar from "./AppNavbar";
 import { Link } from "react-router-dom";
-import {
-  Container,
-  Paper,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Grid,
-  Button,
-  styled,
-} from "@mui/material";
+import { Container, Button, styled } from "@mui/material";
 
 const OvalButton = styled(Button)({
   boxShadow: "none",
   textTransform: "none",
   fontSize: "min(2vw,20px)",
   padding: "6px 12px",
-  border: "1px solid",
+  border: "4px solid",
   borderRadius: "90px",
-  height: "15vw",
   width: "15vw",
-  maxHeight: "150px",
   maxWidth: "150px",
+  minWidth: "60px",
+  aspectRatio: "1/1",
   lineHeight: 1.5,
   textAlign: "center",
-  backgroundColor: "#FAFAFA",
+  backgroundColor: "#EEEEEE",
   borderColor: "#0063cc",
   "&:hover": {
     backgroundColor: "#FAFAFA",
@@ -46,19 +36,22 @@ const OvalButton = styled(Button)({
 });
 
 class Home extends Component {
+  componentDidMount() {}
+
   render() {
     return (
       <div className="main">
         <AppNavbar className="header" />
+        <canvas id="line1" width="600" height="600"></canvas>
         <Container maxWidth="md" className="section-list">
-          <OvalButton className="vehicles" component={Link} to="/vehicles">
+          <OvalButton id="vehicles" component={Link} to="/vehicles">
             Vehicles
           </OvalButton>
           <Container className="bottom-row">
-            <OvalButton className="tasks" component={Link} to="/tasks">
+            <OvalButton id="tasks" component={Link} to="/tasks">
               Maintenance Tasks
             </OvalButton>
-            <OvalButton className="schedules">Schedules</OvalButton>
+            <OvalButton id="schedules">Schedules</OvalButton>
           </Container>
         </Container>
       </div>

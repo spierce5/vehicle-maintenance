@@ -1,5 +1,5 @@
 .main {
-  background-color: #3f51b5;
+  background-color: #ffffff;
   display: grid;
   grid-template-columns: 20vw 20vw 20vw 20vw 20vw;
   grid-template-rows: 20vh 60vh 20vh;
@@ -17,26 +17,14 @@
 
 .section-list {
   grid-area: section-list;
-  display: flex;
+  display: flex !important; /* !important required to override .css-xdmu94-MuiContainer-root*/
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .bottom-row {
-  display: flex;
+  display: flex !important; /* !important required to override .css-xdmu94-MuiContainer-root*/
   flex-direction: row;
-  justify-content: space-between;
-}
-
-.vehicles {
-  grid-area: vehicles;
-}
-
-.tasks {
-  grid-area: tasks;
-}
-
-.schedules {
-  grid-area: schedules;
+  justify-content: space-evenly;
 }
