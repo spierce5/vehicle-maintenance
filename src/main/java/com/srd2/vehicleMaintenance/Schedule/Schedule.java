@@ -8,6 +8,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.srd2.vehicleMaintenance.Task.Task;
 
 @Entity
@@ -23,6 +26,7 @@ public class Schedule {
     private TimeUnit unitId;
     @ManyToOne
     @JoinColumn(name="task_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Task task;
 
     public Schedule() {

@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.srd2.vehicleMaintenance.Vehicle.Vehicle;
 
 @Entity
@@ -29,6 +32,7 @@ public class Task {
     private TaskType type;
     @ManyToOne
     @JoinColumn(name="vehicle")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Vehicle vehicle;
 
     public Task(){
