@@ -206,11 +206,16 @@ class TaskList extends Component {
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               {this.state.deleteDialogOpen ? (
-                <p>
-                  Task: {this.state.currentTask.taskId} <br />
-                  Description: {this.state.currentTask.description} <br />
-                  Vehicle: {this.state.currentTask.vehicle.vehicleId}
-                </p>
+                <div>
+                  <p>
+                    Task: {this.state.currentTask.taskId} <br />
+                    Description: {this.state.currentTask.description} <br />
+                    Vehicle: {this.state.currentTask.vehicle.vehicleId}
+                  </p>
+                  <p style={{ color: "red" }}>
+                    <b>Warning! All schedules for this task will be deleted.</b>
+                  </p>
+                </div>
               ) : (
                 ""
               )}

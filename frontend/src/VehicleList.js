@@ -183,9 +183,24 @@ class VehicleList extends Component {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {this.state.deleteDialogOpen
-                ? JSON.stringify(this.state.currentVehicle)
-                : ""}
+              {this.state.deleteDialogOpen ? (
+                <div>
+                  <p>
+                    Vehicle: {this.state.currentVehicle.description} <br />
+                    Year: {this.state.currentVehicle.year} <br />
+                    Make: {this.state.currentVehicle.make} <br />
+                    Model: {this.state.currentVehicle.model} <br />
+                  </p>
+                  <p style={{ color: "red" }}>
+                    <b>
+                      Warning! All tasks and schedules for this vehicle will be
+                      deleted.
+                    </b>
+                  </p>
+                </div>
+              ) : (
+                ""
+              )}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
