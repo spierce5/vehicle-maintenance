@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  Checkbox,
   TableBody,
   IconButton,
   Dialog,
@@ -23,6 +24,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import DescriptionIcon from "@mui/icons-material/Description";
 import AppNavbar from "./AppNavbar";
+import TaskGrid from "./TaskGrid";
 import { Link } from "react-router-dom";
 
 class TaskList extends Component {
@@ -113,7 +115,10 @@ class TaskList extends Component {
     const taskList = tasks.map((task) => {
       return (
         <TableRow key={task.taskId}>
-          <TableCell style={{ whiteSpace: "nowrap" }}>{task.taskId}</TableCell>
+          <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
+            <Checkbox></Checkbox>
+            <a href={"/tasks/" + task.taskId}>{task.taskId}</a>
+          </TableCell>
           <TableCell>{task.description}</TableCell>
           <TableCell>{task.type.value}</TableCell>
           <TableCell>
@@ -155,12 +160,25 @@ class TaskList extends Component {
       <div>
         <AppNavbar />
         <Container fluid="true">
-          <Stack direction="row">
-            <h3>Tasks</h3>
-            <IconButton color="success" component={Link} to="/tasks/new">
-              <PersonAddAlt1Icon />
-            </IconButton>
-          </Stack>
+          <Stack direction="column" spacing={2}>
+            <Stack direction="row">
+              <h3>Tasks</h3>
+              <IconButton color="success" component={Link} to="/tasks/new">
+                <PersonAddAlt1Icon />
+              </IconButton>
+            </Stack>
+            <TaskGrid tasks={this.state.tasks} density="compact" />
+            {/*TODO:: disabled unless selection is made. open edit page*/}
+            <ButtonGroup>
+              <Button color="secondary" variant="contained">
+                Edit
+              </Button>
+              <Button color="error" variant="contained">
+                Delete
+              </Button>
+            </ButtonGroup>
+            {/* 
+            Replaced with TaskGrid
           <TableContainer>
             <Table className="mt-4">
               <TableHead>
@@ -193,7 +211,8 @@ class TaskList extends Component {
               </TableHead>
               <TableBody>{taskList}</TableBody>
             </Table>
-          </TableContainer>
+          </TableContainer> */}
+          </Stack>
         </Container>
         <Dialog
           open={this.state.deleteDialogOpen}

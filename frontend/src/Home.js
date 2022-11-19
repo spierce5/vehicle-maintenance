@@ -5,7 +5,7 @@ import AppNavbar from "./AppNavbar";
 import { Link } from "react-router-dom";
 import { Container, Button, styled } from "@mui/material";
 
-const OvalButton = styled(Button)({
+const OvalButton = styled(Button)(({ theme }) => ({
   boxShadow: "none",
   textTransform: "none",
   fontSize: "min(2vw,20px)",
@@ -18,8 +18,9 @@ const OvalButton = styled(Button)({
   aspectRatio: "1/1",
   lineHeight: 1.5,
   textAlign: "center",
+  color: theme.palette.secondary.main,
   backgroundColor: "#EEEEEE",
-  borderColor: "#0063cc",
+  borderColor: theme.palette.primary.main,
   "&:hover": {
     backgroundColor: "#FAFAFA",
     borderColor: "#0062cc",
@@ -33,7 +34,7 @@ const OvalButton = styled(Button)({
   "&:focus": {
     boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
   },
-});
+}));
 
 class Home extends Component {
   componentDidMount() {}

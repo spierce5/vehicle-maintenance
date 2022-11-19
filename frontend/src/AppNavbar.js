@@ -13,7 +13,7 @@ export default class AppNavbar extends Component {
   render() {
     return (
       <Box sx={{ flexGrow: 1, width: "100vw" }}>
-        <AppBar position="static" sx={{ backgroundColor: "#424242" }}>
+        <AppBar position="static" color="secondary">
           <Toolbar variant="dense">
             <Button color="inherit" component={Link} to="/">
               Home

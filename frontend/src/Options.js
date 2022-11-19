@@ -24,8 +24,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  ToggleButtonGroup,
-  ToggleButton,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
@@ -44,8 +44,7 @@ class Options extends Component {
       currentValue: {
         value: "",
         description: "",
-        units: 0,
-        unitType: "",
+        active: true,
       },
       newValue: false,
       deleteDialogOpen: false,
@@ -54,6 +53,7 @@ class Options extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.openEditor = this.openEditor.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -102,18 +102,22 @@ class Options extends Component {
     let currentValue = { ...this.state.currentValue };
     currentValue[name] = value;
     this.setState({ currentValue });
-    console.log(this.state.currentValue);
+  }
+
+  handleCheck() {
+    let currentValue = { ...this.state.currentValue };
+    currentValue["active"] = !this.state.currentValue.active;
+    this.setState({ currentValue });
   }
 
   async handleSubmit(event) {
-    /* TODO:  Rewrite for task types and time units */
     event.preventDefault();
     const { currentValue } = this.state;
     await fetch(
-      "/api/time-units" +
-        (currentValue.unitId ? "/" + currentValue.unitId : ""),
+      "/api/task-types" +
+        (currentValue.typeId ? "/" + currentValue.typeId : ""),
       {
-        method: currentValue.unitId ? "PUT" : "POST",
+        method: currentValue.typeId ? "PUT" : "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -121,8 +125,12 @@ class Options extends Component {
         body: JSON.stringify(currentValue),
       }
     );
-    this.props.history.push("/" + this.currentObjectSelection);
+    this.props.history.push("/options");
     this.setState({ editorOpen: false });
+    console.log(this.state.currentValue);
+
+    // Work around for now TODO:: table values not updating after state change. Refreshing allows values to update.
+    window.location.reload();
   }
 
   async remove(id) {
@@ -339,36 +347,15 @@ class Options extends Component {
                   fullWidth
                   variant="outlined"
                 />
-                <ToggleButtonGroup
-                  color="primary"
-                  value={this.state.currentValue.unitType}
-                  exclusive
-                  onChange={this.handleChange}
-                  name="unitType"
-                >
-                  <ToggleButton name="unitType" value="HOURS">
-                    Hours
-                  </ToggleButton>
-                  <ToggleButton name="unitType" value="DAYS">
-                    Days
-                  </ToggleButton>
-                </ToggleButtonGroup>
-                <TextField
-                  margin="dense"
-                  id="units"
-                  name={
-                    this.state.currentValue.unitType === "DAYS"
-                      ? "days"
-                      : "hours"
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={this.state.currentValue.active}
+                      onChange={this.handleCheck}
+                    />
                   }
-                  label="Units"
-                  value={
-                    this.state.currentValue.unitType === "DAYS"
-                      ? this.state.currentValue.days
-                      : this.state.currentValue.hours || ""
-                  }
-                  onChange={this.handleChange}
-                  variant="outlined"
+                  label="Active"
+                  name="active"
                 />
               </Stack>
             </DialogContent>
@@ -389,14 +376,8 @@ class Options extends Component {
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                {this.state.deleteDialogOpen ? (
-                  <p>
-                    Value: {this.state.currentValue.value} <br />
-                    Description: {this.state.currentValue.description} <br />
-                  </p>
-                ) : (
-                  ""
-                )}
+                Value: {this.state.currentValue.value || ""} <br />
+                Description: {this.state.currentValue.description || ""}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
