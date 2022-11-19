@@ -48,7 +48,7 @@ public class TaskTypeController {
     public ResponseEntity<?> updateTaskType(
             @PathVariable("taskTypeId") Long taskTypeId,
             @RequestBody TaskType taskType) {
-        taskTypeService.updateTaskType(taskTypeId, taskType.getValue(), taskType.getDescription());
+        taskTypeService.updateTaskType(taskTypeId, taskType.getValue(), taskType.getDescription(), taskType.getActive());
         return ResponseEntity.ok(taskType);
     }
 }

@@ -47,7 +47,7 @@ public class TaskTypeService {
     }
 
     @Transactional
-    public void updateTaskType(Long typeId, String value, String description) {
+    public void updateTaskType(Long typeId, String value, String description, Boolean active) {
         TaskType taskType = taskTypeRepository.findById(typeId)
             .orElseThrow(() -> new IllegalStateException(
                 "TaskType with ID " + typeId + " does not exist")
@@ -55,16 +55,29 @@ public class TaskTypeService {
 
         if (value != null &&
             value.length() > 0 &&
-            value.length() <= 50 &&
-            !Objects.equals(taskType.getValue(), value)) {
+            value.length() <= 20) {
+            if(!Objects.equals(taskType.getValue(), value)) {
                 taskType.setValue(value);
+            }
+            } else {
+                throw new IllegalStateException("Value must be 1-20 characters.");
             }
         if (description != null &&
             description.length() > 0 &&
-            description.length() <= 50 &&
-            !Objects.equals(taskType.getDescription(), description)) {
+            description.length() <= 75) {
+            if (!Objects.equals(taskType.getDescription(), description)) {
                 taskType.setDescription(description);
             }
+            } else {
+                throw new IllegalStateException("Value must be 1-75 characters.");
+            }
+        if (active != null){
+            if(!Objects.equals(taskType.getActive(), active)) {
+                taskType.setActive(active);
+            } 
+        } else {
+            throw new IllegalStateException("An error occurred");
+        }
     }
 
     
