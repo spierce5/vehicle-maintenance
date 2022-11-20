@@ -122,7 +122,7 @@ const getRows = (tasks) => {
 //     );
 //   });
 
-export default function TaskGrid({ tasks }) {
+export default function TaskGrid({ tasks, updateSelectionList }) {
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
@@ -132,6 +132,7 @@ export default function TaskGrid({ tasks }) {
         rowsPerPageOptions={[15]}
         checkboxSelection
         disableSelectionOnClick
+        onSelectionModelChange={(ids) => updateSelectionList(ids)}
         experimentalFeatures={{ newEditingApi: true }}
       />
     </Box>

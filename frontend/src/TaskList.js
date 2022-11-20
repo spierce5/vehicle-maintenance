@@ -32,6 +32,7 @@ class TaskList extends Component {
     super(props);
     this.state = {
       tasks: [],
+      selectionList: [],
       deleteDialogOpen: false,
       currentTask: null,
       detailsOpen: false,
@@ -42,6 +43,7 @@ class TaskList extends Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.displayDetails = this.displayDetails.bind(this);
     this.closeDetails = this.closeDetails.bind(this);
+    this.updateSelectionList = this.updateSelectionList.bind(this);
   }
 
   componentDidMount() {
@@ -61,6 +63,10 @@ class TaskList extends Component {
       let updatedTasks = [...this.state.tasks].filter((i) => i.taskId !== id);
       this.setState({ tasks: updatedTasks });
     });
+  }
+
+  updateSelectionList(list) {
+    this.setState({ selectionList: list });
   }
 
   displayDetails(task, type) {
@@ -112,49 +118,49 @@ class TaskList extends Component {
       return <p>Loading...</p>;
     }
 
-    const taskList = tasks.map((task) => {
-      return (
-        <TableRow key={task.taskId}>
-          <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
-            <Checkbox></Checkbox>
-            <a href={"/tasks/" + task.taskId}>{task.taskId}</a>
-          </TableCell>
-          <TableCell>{task.description}</TableCell>
-          <TableCell>{task.type.value}</TableCell>
-          <TableCell>
-            {task.vehicle.vehicleId + ": " + task.vehicle.description}
-          </TableCell>
-          <TableCell>{task.dateEntered}</TableCell>
-          <TableCell>{task.dateDue}</TableCell>
-          <TableCell>
-            <IconButton
-              onClick={() => this.displayDetails(task, "INSTRUCTIONS")}
-            >
-              <DescriptionIcon />
-            </IconButton>
-          </TableCell>
-          <TableCell>
-            <IconButton onClick={() => this.displayDetails(task, "NOTES")}>
-              <DescriptionIcon />
-            </IconButton>
-          </TableCell>
-          <TableCell>
-            <ButtonGroup>
-              <IconButton
-                color="success"
-                component={Link}
-                to={"/tasks/" + task.taskId}
-              >
-                <ModeEditIcon />
-              </IconButton>
-              <IconButton color="error" onClick={() => this.handleDelete(task)}>
-                <DeleteForeverIcon />
-              </IconButton>
-            </ButtonGroup>
-          </TableCell>
-        </TableRow>
-      );
-    });
+    // const taskList = tasks.map((task) => {
+    //   return (
+    //     <TableRow key={task.taskId}>
+    //       <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
+    //         <Checkbox></Checkbox>
+    //         <a href={"/tasks/" + task.taskId}>{task.taskId}</a>
+    //       </TableCell>
+    //       <TableCell>{task.description}</TableCell>
+    //       <TableCell>{task.type.value}</TableCell>
+    //       <TableCell>
+    //         {task.vehicle.vehicleId + ": " + task.vehicle.description}
+    //       </TableCell>
+    //       <TableCell>{task.dateEntered}</TableCell>
+    //       <TableCell>{task.dateDue}</TableCell>
+    //       <TableCell>
+    //         <IconButton
+    //           onClick={() => this.displayDetails(task, "INSTRUCTIONS")}
+    //         >
+    //           <DescriptionIcon />
+    //         </IconButton>
+    //       </TableCell>
+    //       <TableCell>
+    //         <IconButton onClick={() => this.displayDetails(task, "NOTES")}>
+    //           <DescriptionIcon />
+    //         </IconButton>
+    //       </TableCell>
+    //       <TableCell>
+    //         <ButtonGroup>
+    //           <IconButton
+    //             color="success"
+    //             component={Link}
+    //             to={"/tasks/" + task.taskId}
+    //           >
+    //             <ModeEditIcon />
+    //           </IconButton>
+    //           <IconButton color="error" onClick={() => this.handleDelete(task)}>
+    //             <DeleteForeverIcon />
+    //           </IconButton>
+    //         </ButtonGroup>
+    //       </TableCell>
+    //     </TableRow>
+    //   );
+    // });
 
     return (
       <div>
@@ -167,10 +173,18 @@ class TaskList extends Component {
                 <PersonAddAlt1Icon />
               </IconButton>
             </Stack>
-            <TaskGrid tasks={this.state.tasks} density="compact" />
+            <TaskGrid
+              tasks={this.state.tasks}
+              density="compact"
+              updateSelectionList={this.updateSelectionList}
+            />
             {/*TODO:: disabled unless selection is made. open edit page*/}
             <ButtonGroup>
-              <Button color="secondary" variant="contained">
+              <Button
+                disabled={this.state.selectionList.length != 1}
+                color="secondary"
+                variant="contained"
+              >
                 Edit
               </Button>
               <Button color="error" variant="contained">
