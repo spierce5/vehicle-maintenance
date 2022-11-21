@@ -178,16 +178,23 @@ class TaskList extends Component {
               density="compact"
               updateSelectionList={this.updateSelectionList}
             />
-            {/*TODO:: disabled unless selection is made. open edit page*/}
+            {/*TODO:: Set up mass deletion window */}
             <ButtonGroup>
               <Button
                 disabled={this.state.selectionList.length != 1}
                 color="secondary"
                 variant="contained"
+                component={Link}
+                to={"/tasks/" + this.state.selectionList[0]}
               >
                 Edit
               </Button>
-              <Button color="error" variant="contained">
+              <Button 
+                color="error" 
+                variant="contained" 
+                disabled={this.state.selectionList.length < 1} 
+                onClick={() => this.handleDelete(this.state.tasks.find(task => task.taskId === this.state.selectionList[0]))}
+                >
                 Delete
               </Button>
             </ButtonGroup>

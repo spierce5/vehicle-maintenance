@@ -2364,3 +2364,5 @@ frontend/node_modules/ws/lib/subprotocol.js
 frontend/node_modules/ws/lib/validation.js
 frontend/node_modules/ws/lib/websocket-server.js
 frontend/node_modules/ws/lib/websocket.js
+node_modules
+node_modules
