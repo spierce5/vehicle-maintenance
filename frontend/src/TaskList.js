@@ -52,21 +52,32 @@ class TaskList extends Component {
       .then((data) => this.setState({ tasks: data }));
   }
 
-  async remove(id) {
-    await fetch(`/api/tasks/${id}`, {
-      method: "DELETE",
+  async remove(list) {
+    // await fetch(`/api/tasks/${id}`, {
+    //   method: "DELETE",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    // }).then(() => {
+    //   let updatedTasks = [...this.state.tasks].filter((i) => i.taskId !== id);
+    //   this.setState({ tasks: updatedTasks });
+    // });
+    await fetch(`/api/tasks/delete-tasks`, {
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-    }).then(() => {
-      let updatedTasks = [...this.state.tasks].filter((i) => i.taskId !== id);
-      this.setState({ tasks: updatedTasks });
+      body: JSON.stringify(list),
     });
+    this.props.history.push("/tasks");
+    this.setState({tasks: this.state.tasks.filter(task => !list.includes(task))})
   }
 
   updateSelectionList(list) {
-    this.setState({ selectionList: list });
+    const taskList = list.map( id => this.state.tasks.find(task => task.taskId === id))
+    this.setState({ selectionList: taskList });
   }
 
   displayDetails(task, type) {
@@ -87,7 +98,7 @@ class TaskList extends Component {
 
   handleDialogClose(choice) {
     if (choice === "DELETE") {
-      this.remove(this.state.currentTask.taskId);
+      this.remove(this.state.selectionList);
     }
     this.setState({
       deleteDialogOpen: false,
@@ -96,7 +107,7 @@ class TaskList extends Component {
 
   handleDelete(task) {
     const newState = { ...this.state };
-    newState["currentTask"] = task;
+    //newState["currentTask"] = task;
     newState["deleteDialogOpen"] = true;
     this.setState(newState);
   }
@@ -193,7 +204,7 @@ class TaskList extends Component {
                 color="error" 
                 variant="contained" 
                 disabled={this.state.selectionList.length < 1} 
-                onClick={() => this.handleDelete(this.state.tasks.find(task => task.taskId === this.state.selectionList[0]))}
+                onClick={this.handleDelete}
                 >
                 Delete
               </Button>
@@ -241,19 +252,26 @@ class TaskList extends Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            {"Are you sure you want to delete this task?"}
+            {"Are you sure you want to delete these tasks?"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               {this.state.deleteDialogOpen ? (
                 <div>
-                  <p>
-                    Task: {this.state.currentTask.taskId} <br />
-                    Description: {this.state.currentTask.description} <br />
-                    Vehicle: {this.state.currentTask.vehicle.vehicleId}
-                  </p>
+                  {
+                    this.state.selectionList.map( task => {
+                      return (
+                      <p>
+                        Task: {task.taskId} <br />
+                        Description: {task.description} <br />
+                        Vehicle: {task.vehicle.vehicleId}<hr/>
+                      </p>
+                      )
+                    }
+                    )
+                  }
                   <p style={{ color: "red" }}>
-                    <b>Warning! All schedules for this task will be deleted.</b>
+                    <b>Warning! All schedules for the selected tasks will be deleted.</b>
                   </p>
                 </div>
               ) : (
