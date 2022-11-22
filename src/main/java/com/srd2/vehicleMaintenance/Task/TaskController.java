@@ -44,6 +44,13 @@ public class TaskController {
         taskService.deleteTask(taskId);
     }
 
+    @PostMapping(path = "delete-tasks")
+    public void deleteMultipleTasks(@RequestBody List<Task> taskList){
+        for(Task task: taskList){
+            taskService.deleteTask(task.getTaskId());
+        }
+    }
+
     @PutMapping(path = "{taskId}")
     public ResponseEntity<?> updateTask(
             @PathVariable("taskId") Long taskId,
