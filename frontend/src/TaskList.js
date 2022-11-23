@@ -189,14 +189,13 @@ class TaskList extends Component {
               density="compact"
               updateSelectionList={this.updateSelectionList}
             />
-            {/*TODO:: Set up mass deletion window */}
             <ButtonGroup>
               <Button
                 disabled={this.state.selectionList.length != 1}
                 color="secondary"
                 variant="contained"
                 component={Link}
-                to={"/tasks/" + this.state.selectionList[0]}
+                to={this.state.selectionList.length > 0 ? "/tasks/" + this.state.selectionList[0].taskId : ''}
               >
                 Edit
               </Button>

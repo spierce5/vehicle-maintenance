@@ -23,6 +23,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import DescriptionIcon from "@mui/icons-material/Description";
 import AppNavbar from "./AppNavbar";
+import VehicleGrid from "./VehicleGrid";
 import { Link } from "react-router-dom";
 
 class VehicleList extends Component {
@@ -30,6 +31,7 @@ class VehicleList extends Component {
     super(props);
     this.state = {
       vehicles: [],
+      selectionList: [],
       deleteDialogOpen: false,
       currentVehicle: null,
       notesOpen: false,
@@ -39,6 +41,7 @@ class VehicleList extends Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.displayNotes = this.displayNotes.bind(this);
     this.closeNotes = this.closeNotes.bind(this);
+    this.updateSelectionList = this.updateSelectionList.bind(this);
   }
 
   componentDidMount() {
@@ -47,19 +50,22 @@ class VehicleList extends Component {
       .then((data) => this.setState({ vehicles: data }));
   }
 
-  async remove(id) {
-    await fetch(`/api/vehicles/${id}`, {
-      method: "DELETE",
+  async remove(list) {
+    await fetch(`/api/vehicles/delete-vehicles`, {
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-    }).then(() => {
-      let updatedVehicles = [...this.state.vehicles].filter(
-        (i) => i.vehicleId !== id
-      );
-      this.setState({ vehicles: updatedVehicles });
+      body: JSON.stringify(list),
     });
+    this.props.history.push("/vehicles");
+    this.setState({vehicles: this.state.vehicles.filter(vehicle => !list.includes(vehicle))})
+  }
+
+  updateSelectionList(list) {
+    const taskList = list.map( id => this.state.vehicles.find(vehicle => vehicle.vehicleId === id))
+    this.setState({ selectionList: taskList });
   }
 
   displayNotes(vehicle) {
@@ -78,7 +84,7 @@ class VehicleList extends Component {
 
   handleDialogClose(choice) {
     if (choice === "DELETE") {
-      this.remove(this.state.currentVehicle.vehicleId);
+      this.remove(this.state.selectionList);
     }
     this.setState({
       deleteDialogOpen: false,
@@ -145,7 +151,31 @@ class VehicleList extends Component {
               <PersonAddAlt1Icon />
             </IconButton>
           </Stack>
-          <TableContainer>
+          <VehicleGrid 
+              vehicles={this.state.vehicles}
+              density="compact"
+              updateSelectionList={this.updateSelectionList}
+            />
+          <ButtonGroup>
+              <Button
+                disabled={this.state.selectionList.length !== 1}
+                color="secondary"
+                variant="contained"
+                component={Link}
+                to={ this.state.selectionList.length > 0 ? "/vehicles/" + this.state.selectionList[0].vehicleId : ''}
+              >
+                Edit
+              </Button>
+              <Button 
+                color="error" 
+                variant="contained" 
+                disabled={this.state.selectionList.length < 1} 
+                onClick={this.handleDelete}
+                >
+                Delete
+              </Button>
+            </ButtonGroup>
+          {/* <TableContainer>
             <Table className="mt-4">
               <TableHead>
                 <TableRow>
@@ -171,7 +201,7 @@ class VehicleList extends Component {
               </TableHead>
               <TableBody>{vehicleList}</TableBody>
             </Table>
-          </TableContainer>
+          </TableContainer> */}
         </Container>
         <Dialog
           open={this.state.deleteDialogOpen}
@@ -179,21 +209,28 @@ class VehicleList extends Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            {"Are you sure you want to delete this vehicle?"}
+            {"Are you sure you want to delete these vehicles?"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               {this.state.deleteDialogOpen ? (
                 <div>
-                  <p>
-                    Vehicle: {this.state.currentVehicle.description} <br />
-                    Year: {this.state.currentVehicle.year} <br />
-                    Make: {this.state.currentVehicle.make} <br />
-                    Model: {this.state.currentVehicle.model} <br />
-                  </p>
+                  {
+                    this.state.selectionList.map( vehicle => {
+                      return (
+                      <p>
+                        Vehicle: {vehicle.description} <br />
+                        Year: {vehicle.year} <br />
+                        Make: {vehicle.make} <br />
+                        Model: {vehicle.model} <hr/>
+                      </p>
+                      )
+                    }
+                    )
+                  }
                   <p style={{ color: "red" }}>
                     <b>
-                      Warning! All tasks and schedules for this vehicle will be
+                      Warning! All tasks and schedules for these vehicles will be
                       deleted.
                     </b>
                   </p>
