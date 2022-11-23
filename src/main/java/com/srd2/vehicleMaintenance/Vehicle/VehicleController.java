@@ -44,6 +44,13 @@ public class VehicleController {
         vehicleService.deleteVehicle(vehicleId);
     }
 
+    @PostMapping(path = "delete-vehicles")
+    public void deleteMultipleVehicles(@RequestBody List<Vehicle> vehicles){
+        for(Vehicle vehicle: vehicles){
+            vehicleService.deleteVehicle(vehicle.getVehicleId());
+        }
+    }
+
     @PutMapping(path = "{vehicleId}")
     public ResponseEntity<?> updateVehicle(
             @PathVariable("vehicleId") Long vehicleId,
