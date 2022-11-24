@@ -17,11 +17,13 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Fab,
   Typography,
 } from "@mui/material";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import AddIcon from "@mui/icons-material/Add"
+import EditIcon from "@mui/icons-material/Edit"
 import DescriptionIcon from "@mui/icons-material/Description";
 import AppNavbar from "./AppNavbar";
 import TaskGrid from "./TaskGrid";
@@ -80,11 +82,9 @@ class TaskList extends Component {
     this.setState({ selectionList: taskList });
   }
 
-  displayDetails(task, type) {
+  displayDetails() {
     this.setState({
       detailsOpen: true,
-      currentTask: task,
-      detailType: type,
     });
   }
 
@@ -184,11 +184,26 @@ class TaskList extends Component {
                 <PersonAddAlt1Icon />
               </IconButton>
             </Stack>
-            <TaskGrid
-              tasks={this.state.tasks}
-              density="compact"
-              updateSelectionList={this.updateSelectionList}
-            />
+              <TaskGrid
+                tasks={this.state.tasks}
+                density="compact"
+                updateSelectionList={this.updateSelectionList}
+              />
+            <Stack direction="row" spacing={1}>
+                <Fab size="medium">
+                  <AddIcon/>
+                </Fab>
+                <Fab size="medium">
+                  <EditIcon/>
+                </Fab>
+                <Fab size="medium">
+                  <DescriptionIcon/>
+                </Fab>
+                <Fab size="medium">
+                  <DeleteForeverIcon/>
+                </Fab>
+            </Stack>
+            {/* Replacing with above fabs */}
             <ButtonGroup>
               <Button
                 disabled={this.state.selectionList.length != 1}
@@ -206,6 +221,15 @@ class TaskList extends Component {
                 onClick={this.handleDelete}
                 >
                 Delete
+              </Button>
+              {/* Temporary buttons */}
+              <Button 
+                color='secondary'
+                variant='contained'
+                disabled={this.state.selectionList.length !== 1}
+                onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
+                >
+                Details
               </Button>
             </ButtonGroup>
             {/* 
@@ -295,23 +319,37 @@ class TaskList extends Component {
           fullWidth={true}
         >
           <DialogTitle id="notes-dialog-title">
-            {this.state.currentTask
-              ? this.state.detailType
-                  .toLowerCase()
-                  .replace(/(^\w{1})/g, (l) => l.toUpperCase()) +
-                " for task " +
-                this.state.currentTask.taskId +
+            {this.state.selectionList.length === 1
+              ? "Task " +
+                this.state.selectionList[0].taskId +
                 " - " +
-                this.state.currentTask.description
+                this.state.selectionList[0].description
               : ""}
           </DialogTitle>
           <DialogContent dividers>
             <Typography gutterBottom sx={{ whiteSpace: "pre-wrap" }}>
-              <p>
-                {this.state.currentTask
-                  ? this.state.currentTask[this.state.detailType.toLowerCase()]
-                  : ""}
-              </p>
+              <div>
+                <h3>
+                  Notes
+                </h3><br/>
+                <p>
+                  {
+                    this.state.selectionList.length === 1 ? 
+                      this.state.selectionList[0].notes :
+                        ''
+                  }
+                </p><hr/>
+                <h3>
+                  Instructions
+                </h3>
+                <p>
+                  {
+                    this.state.selectionList.length === 1 ?
+                      this.state.selectionList[0].instructions :
+                        ''
+                  }
+                </p>
+              </div>
             </Typography>
           </DialogContent>
           <DialogActions>

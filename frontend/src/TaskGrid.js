@@ -13,6 +13,7 @@ const columns = [
     field: "description",
     headerName: "Description",
     flex: 1.5,
+    sortable: false,
     editable: false,
   },
   {
@@ -33,29 +34,13 @@ const columns = [
     field: "dateEntered",
     headerName: "Date Entered",
     description: "This column has a value getter and is not sortable.",
-    sortable: false,
     flex: 1,
   },
   {
     field: "dateDue",
     headerName: "Date Due",
     description: "This column has a value getter and is not sortable.",
-    sortable: false,
     flex: 1,
-  },
-  {
-    field: "instructions",
-    headerName: "Instructions",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    flex: 0.5,
-  },
-  {
-    field: "notes",
-    headerName: "Notes",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    flex: 0.5,
   },
 ];
 
@@ -71,8 +56,6 @@ const getRows = (tasks) => {
       vehicle: task.vehicle.description,
       dateEntered: task.dateEntered,
       dateDue: task.dateDue,
-      instructions: task.instructions,
-      notes: task.notes,
     };
   });
   return result;
