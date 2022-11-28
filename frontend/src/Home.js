@@ -46,9 +46,9 @@ class Home extends Component {
     return (
       <div className="main">
         <AppNavbar className="header" />
-        <Tooltip title="Vehicles" placement="bottom-start"><OvalButton id="vehicle-button" component={Link} to="/vehicles"><DirectionsCarIcon className="icon" /></OvalButton></Tooltip>
-        <Tooltip title="Maintenance Tasks" placement="bottom-start"><OvalButton id="task-button" component={Link} to="/tasks"><AssignmentIcon className="icon" /></OvalButton></Tooltip>
-        <Tooltip title="Schedules" placement="bottom-start"><OvalButton id="schedule-button" ><CalendarMonthIcon className="icon" /></OvalButton></Tooltip>
+        <Tooltip title="Vehicles" placement="bottom-start"><OvalButton id="vehicle-button" component={Link} to="/vehicles"><DirectionsCarIcon fontSize="large" className="icon" /></OvalButton></Tooltip>
+        <Tooltip title="Maintenance Tasks" placement="bottom-start"><OvalButton id="task-button" component={Link} to="/tasks"><AssignmentIcon fontSize="large" className="icon" /></OvalButton></Tooltip>
+        <Tooltip title="Schedules" placement="bottom-start"><OvalButton id="schedule-button" ><CalendarMonthIcon fontSize="large" className="icon" /></OvalButton></Tooltip>
       </div>
     );
   }
