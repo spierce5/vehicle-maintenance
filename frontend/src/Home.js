@@ -3,7 +3,10 @@ import "./App.css";
 import "./Home.css";
 import AppNavbar from "./AppNavbar";
 import { Link } from "react-router-dom";
-import { Container, Button, styled } from "@mui/material";
+import { Button, styled, Tooltip } from "@mui/material";
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const OvalButton = styled(Button)(({ theme }) => ({
   boxShadow: "none",
@@ -14,7 +17,7 @@ const OvalButton = styled(Button)(({ theme }) => ({
   borderRadius: "90px",
   width: "15vw",
   maxWidth: "150px",
-  minWidth: "60px",
+  minWidth: "90px",
   aspectRatio: "1/1",
   lineHeight: 1.5,
   textAlign: "center",
@@ -37,24 +40,15 @@ const OvalButton = styled(Button)(({ theme }) => ({
 }));
 
 class Home extends Component {
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     return (
       <div className="main">
         <AppNavbar className="header" />
-        <canvas id="line1" width="600" height="600"></canvas>
-        <Container maxWidth="md" className="section-list">
-          <OvalButton id="vehicles" component={Link} to="/vehicles">
-            Vehicles
-          </OvalButton>
-          <Container className="bottom-row">
-            <OvalButton id="tasks" component={Link} to="/tasks">
-              Maintenance Tasks
-            </OvalButton>
-            <OvalButton id="schedules">Schedules</OvalButton>
-          </Container>
-        </Container>
+        <Tooltip title="Vehicles" placement="bottom-start"><OvalButton id="vehicle-button" component={Link} to="/vehicles"><DirectionsCarIcon className="icon" /></OvalButton></Tooltip>
+        <Tooltip title="Maintenance Tasks" placement="bottom-start"><OvalButton id="task-button" component={Link} to="/tasks"><AssignmentIcon className="icon" /></OvalButton></Tooltip>
+        <Tooltip title="Schedules" placement="bottom-start"><OvalButton id="schedule-button" ><CalendarMonthIcon className="icon" /></OvalButton></Tooltip>
       </div>
     );
   }

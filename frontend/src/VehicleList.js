@@ -17,6 +17,7 @@ import {
   DialogActions,
   Button,
   Fab,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -155,30 +156,44 @@ class VehicleList extends Component {
               updateSelectionList={this.updateSelectionList}
             />
             <Stack direction="row" spacing={1}>
-              <Fab size="medium"
-                component={Link}
-                to="/vehicles/new">
-                <AddIcon />
-              </Fab>
-              <Fab size="medium"
-                component={Link}
-                to={this.state.selectionList.length > 0 ? "/vehicles/" + this.state.selectionList[0].vehicleId : ''}
-                disabled={this.state.selectionList.length != 1}
-              >
-                <EditIcon />
-              </Fab>
-              <Fab size="medium"
-                onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
-                disabled={this.state.selectionList.length !== 1}
-              >
-                <DescriptionIcon />
-              </Fab>
-              <Fab size="medium"
-                onClick={this.handleDelete}
-                disabled={this.state.selectionList.length < 1}
-              >
-                <DeleteForeverIcon />
-              </Fab>
+              <Tooltip title="Add">
+                <Fab size="medium"
+                  component={Link}
+                  to="/vehicles/new">
+                  <AddIcon />
+                </Fab>
+              </Tooltip>
+              <Tooltip title={this.state.selectionList.length === 1 ? "Edit" : this.state.selectionList.length < 1 ? "You must select a vehicle to edit." : "You can only edit one vehicle at a time."}>
+                <span>
+                  <Fab size="medium"
+                    component={Link}
+                    to={this.state.selectionList.length > 0 ? "/vehicles/" + this.state.selectionList[0].vehicleId : ''}
+                    disabled={this.state.selectionList.length !== 1}
+                  >
+                    <EditIcon />
+                  </Fab>
+                </span>
+              </Tooltip>
+              <Tooltip title={this.state.selectionList.length === 1 ? "Notes" : this.state.selectionList.length < 1 ? "You must select a vehicle to display notes." : "You can only display notes for one vehicle at a time."}>
+                <span>
+                  <Fab size="medium"
+                    onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
+                    disabled={this.state.selectionList.length !== 1}
+                  >
+                    <DescriptionIcon />
+                  </Fab>
+                </span>
+              </Tooltip>
+              <Tooltip title={this.state.selectionList.length < 1 ? "You must select a vehicle to delete." : "Delete"}>
+                <span>
+                  <Fab size="medium"
+                    onClick={this.handleDelete}
+                    disabled={this.state.selectionList.length < 1}
+                  >
+                    <DeleteForeverIcon />
+                  </Fab>
+                </span>
+              </Tooltip>
             </Stack>
             {/* <TableContainer>
             <Table className="mt-4">

@@ -19,7 +19,6 @@ const columns = [
   {
     field: "type",
     headerName: "Type",
-    type: "number",
     flex: 1,
     editable: false,
   },

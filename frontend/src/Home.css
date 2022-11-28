@@ -1,30 +1,32 @@
 .main {
-  background-color: #ffffff;
-  display: grid;
-  grid-template-columns: 20vw 20vw 20vw 20vw 20vw;
-  grid-template-rows: 20vh 60vh 20vh;
-  grid-template-areas:
-    "header header header header header"
-    ". section-list  section-list section-list ."
-    ". . . . .";
   width: 100vw;
   height: 100vh;
 }
 
-.header {
-  grid-area: header;
+#vehicle-button {
+  position: absolute;
+  aspect-ratio: 1/1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -150%)
 }
 
-.section-list {
-  grid-area: section-list;
-  display: flex !important; /* !important required to override .css-xdmu94-MuiContainer-root*/
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
+#task-button {
+  position: absolute;
+  aspect-ratio: 1/1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-150%, 0%)
 }
 
-.bottom-row {
-  display: flex !important; /* !important required to override .css-xdmu94-MuiContainer-root*/
-  flex-direction: row;
-  justify-content: space-evenly;
+#schedule-button {
+  position: absolute;
+  aspect-ratio: 1/1;
+  top: 50%;
+  left: 50%;
+  transform: translate(50%, 0%)
+}
+
+.icon {
+  font-size: 60px;
 }

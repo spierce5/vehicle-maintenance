@@ -18,6 +18,7 @@ import {
   DialogActions,
   Button,
   Fab,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -131,30 +132,44 @@ class TaskList extends Component {
               updateSelectionList={this.updateSelectionList}
             />
             <Stack direction="row" spacing={1}>
-              <Fab size="medium"
-                component={Link}
-                to="/tasks/new">
-                <AddIcon />
-              </Fab>
-              <Fab size="medium"
-                component={Link}
-                to={this.state.selectionList.length > 0 ? "/tasks/" + this.state.selectionList[0].taskId : ''}
-                disabled={this.state.selectionList.length != 1}
-              >
-                <EditIcon />
-              </Fab>
-              <Fab size="medium"
-                onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
-                disabled={this.state.selectionList.length !== 1}
-              >
-                <DescriptionIcon />
-              </Fab>
-              <Fab size="medium"
-                onClick={this.handleDelete}
-                disabled={this.state.selectionList.length < 1}
-              >
-                <DeleteForeverIcon />
-              </Fab>
+              <Tooltip title="Add">
+                <Fab size="medium"
+                  component={Link}
+                  to="/tasks/new">
+                  <AddIcon />
+                </Fab>
+              </Tooltip>
+              <Tooltip title={this.state.selectionList.length === 1 ? "Edit" : this.state.selectionList.length < 1 ? "You must select a task to edit." : "You can only edit one task at a time."}>
+                <span>
+                  <Fab size="medium"
+                    component={Link}
+                    to={this.state.selectionList.length > 0 ? "/tasks/" + this.state.selectionList[0].taskId : ''}
+                    disabled={this.state.selectionList.length != 1}
+                  >
+                    <EditIcon />
+                  </Fab>
+                </span>
+              </Tooltip>
+              <Tooltip title={this.state.selectionList.length === 1 ? "Details" : this.state.selectionList.length < 1 ? "You must select a task to display details." : "You can only display details for one vehicle at a time."}>
+                <span>
+                  <Fab size="medium"
+                    onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
+                    disabled={this.state.selectionList.length !== 1}
+                  >
+                    <DescriptionIcon />
+                  </Fab>
+                </span>
+              </Tooltip>
+              <Tooltip title={this.state.selectionList.length < 1 ? "You must select at least one task to delete." : "Delete"}>
+                <span>
+                  <Fab size="medium"
+                    onClick={this.handleDelete}
+                    disabled={this.state.selectionList.length < 1}
+                  >
+                    <DeleteForeverIcon />
+                  </Fab>
+                </span>
+              </Tooltip>
             </Stack>
           </Stack>
         </Container>

@@ -6,20 +6,19 @@ const columns = [
   {
     field: "vehicleId",
     headerName: "Vehicle ID",
-    flex: 1,
+    flex: 0.5,
     editable: false,
   },
   {
     field: "description",
     headerName: "Description",
-    flex: 2,
+    flex: 1.5,
     editable: false,
   },
   {
     field: "make",
     headerName: "Make",
-    type: "number",
-    flex: 1,
+    flex: 0.5,
     editable: false,
   },
   {
@@ -27,14 +26,14 @@ const columns = [
     headerName: "Model",
     description: "This column has a value getter and is not sortable.",
     sortable: false,
-    flex: 1,
+    flex: 0.5,
   },
   {
     field: "year",
     headerName: "Year",
     description: "This column has a value getter and is not sortable.",
     sortable: false,
-    flex: 1,
+    flex: 0.5,
   }
 ];
 
