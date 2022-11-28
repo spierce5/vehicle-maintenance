@@ -190,20 +190,32 @@ class TaskList extends Component {
                 updateSelectionList={this.updateSelectionList}
               />
             <Stack direction="row" spacing={1}>
-                <Fab size="medium">
+                <Fab size="medium" 
+                  component={Link} 
+                  to="/tasks/new">
                   <AddIcon/>
                 </Fab>
-                <Fab size="medium">
+                <Fab size="medium" 
+                  component={Link}
+                  to={this.state.selectionList.length > 0 ? "/tasks/" + this.state.selectionList[0].taskId : ''}
+                  disabled={this.state.selectionList.length != 1}
+                  >
                   <EditIcon/>
                 </Fab>
-                <Fab size="medium">
+                <Fab size="medium" 
+                  onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
+                  disabled={this.state.selectionList.length !== 1}
+                  >
                   <DescriptionIcon/>
                 </Fab>
-                <Fab size="medium">
+                <Fab size="medium" 
+                  onClick={this.handleDelete}
+                  disabled={this.state.selectionList.length < 1} 
+                  >
                   <DeleteForeverIcon/>
                 </Fab>
             </Stack>
-            {/* Replacing with above fabs */}
+            {/* Replacing with above fabs 
             <ButtonGroup>
               <Button
                 disabled={this.state.selectionList.length != 1}
@@ -222,7 +234,6 @@ class TaskList extends Component {
                 >
                 Delete
               </Button>
-              {/* Temporary buttons */}
               <Button 
                 color='secondary'
                 variant='contained'
@@ -232,6 +243,7 @@ class TaskList extends Component {
                 Details
               </Button>
             </ButtonGroup>
+            */}
             {/* 
             Replaced with TaskGrid
           <TableContainer>

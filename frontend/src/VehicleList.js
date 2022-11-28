@@ -16,11 +16,14 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  Fab,
   Typography,
 } from "@mui/material";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import AddIcon from "@mui/icons-material/Add"
+import EditIcon from "@mui/icons-material/Edit"
 import DescriptionIcon from "@mui/icons-material/Description";
 import AppNavbar from "./AppNavbar";
 import VehicleGrid from "./VehicleGrid";
@@ -34,13 +37,13 @@ class VehicleList extends Component {
       selectionList: [],
       deleteDialogOpen: false,
       currentVehicle: null,
-      notesOpen: false,
+      detailsOpen: false,
     };
     this.remove = this.remove.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-    this.displayNotes = this.displayNotes.bind(this);
-    this.closeNotes = this.closeNotes.bind(this);
+    this.displayDetails = this.displayDetails.bind(this);
+    this.closeDetails = this.closeDetails.bind(this);
     this.updateSelectionList = this.updateSelectionList.bind(this);
   }
 
@@ -60,24 +63,23 @@ class VehicleList extends Component {
       body: JSON.stringify(list),
     });
     this.props.history.push("/vehicles");
-    this.setState({vehicles: this.state.vehicles.filter(vehicle => !list.includes(vehicle))})
+    this.setState({ vehicles: this.state.vehicles.filter(vehicle => !list.includes(vehicle)) })
   }
 
   updateSelectionList(list) {
-    const taskList = list.map( id => this.state.vehicles.find(vehicle => vehicle.vehicleId === id))
+    const taskList = list.map(id => this.state.vehicles.find(vehicle => vehicle.vehicleId === id))
     this.setState({ selectionList: taskList });
   }
 
-  displayNotes(vehicle) {
+  displayDetails() {
     this.setState({
-      notesOpen: true,
-      currentVehicle: vehicle,
+      detailsOpen: true,
     });
   }
 
-  closeNotes() {
+  closeDetails() {
     this.setState({
-      notesOpen: false,
+      detailsOpen: false,
       currentVehicle: null,
     });
   }
@@ -145,37 +147,42 @@ class VehicleList extends Component {
       <div>
         <AppNavbar />
         <Container fluid="true">
-          <Stack direction="row">
-            <h3>Vehicles</h3>
-            <IconButton color="success" component={Link} to="/vehicles/new">
-              <PersonAddAlt1Icon />
-            </IconButton>
-          </Stack>
-          <VehicleGrid 
+          <Stack direction="column" spacing={2}>
+            <Stack direction="row">
+              <h3>Vehicles</h3>
+            </Stack>
+            <VehicleGrid
               vehicles={this.state.vehicles}
               density="compact"
               updateSelectionList={this.updateSelectionList}
             />
-          <ButtonGroup>
-              <Button
-                disabled={this.state.selectionList.length !== 1}
-                color="secondary"
-                variant="contained"
+            <Stack direction="row" spacing={1}>
+              <Fab size="medium"
                 component={Link}
-                to={ this.state.selectionList.length > 0 ? "/vehicles/" + this.state.selectionList[0].vehicleId : ''}
+                to="/vehicles/new">
+                <AddIcon />
+              </Fab>
+              <Fab size="medium"
+                component={Link}
+                to={this.state.selectionList.length > 0 ? "/vehicles/" + this.state.selectionList[0].vehicleId : ''}
+                disabled={this.state.selectionList.length != 1}
               >
-                Edit
-              </Button>
-              <Button 
-                color="error" 
-                variant="contained" 
-                disabled={this.state.selectionList.length < 1} 
+                <EditIcon />
+              </Fab>
+              <Fab size="medium"
+                onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
+                disabled={this.state.selectionList.length !== 1}
+              >
+                <DescriptionIcon />
+              </Fab>
+              <Fab size="medium"
                 onClick={this.handleDelete}
-                >
-                Delete
-              </Button>
-            </ButtonGroup>
-          {/* <TableContainer>
+                disabled={this.state.selectionList.length < 1}
+              >
+                <DeleteForeverIcon />
+              </Fab>
+            </Stack>
+            {/* <TableContainer>
             <Table className="mt-4">
               <TableHead>
                 <TableRow>
@@ -202,6 +209,7 @@ class VehicleList extends Component {
               <TableBody>{vehicleList}</TableBody>
             </Table>
           </TableContainer> */}
+          </Stack>
         </Container>
         <Dialog
           open={this.state.deleteDialogOpen}
@@ -216,14 +224,14 @@ class VehicleList extends Component {
               {this.state.deleteDialogOpen ? (
                 <div>
                   {
-                    this.state.selectionList.map( vehicle => {
+                    this.state.selectionList.map(vehicle => {
                       return (
-                      <p>
-                        Vehicle: {vehicle.description} <br />
-                        Year: {vehicle.year} <br />
-                        Make: {vehicle.make} <br />
-                        Model: {vehicle.model} <hr/>
-                      </p>
+                        <p>
+                          Vehicle: {vehicle.description} <br />
+                          Year: {vehicle.year} <br />
+                          Make: {vehicle.make} <br />
+                          Model: {vehicle.model} <hr />
+                        </p>
                       )
                     }
                     )
@@ -250,24 +258,38 @@ class VehicleList extends Component {
           </DialogActions>
         </Dialog>
         <Dialog
-          onClose={this.closeNotes}
-          open={this.state.notesOpen}
+          onClose={this.closeDetails}
+          open={this.state.detailsOpen}
           aria-labelledby="notes-dialog-title"
           maxWidth="sm"
           fullWidth={true}
         >
           <DialogTitle id="notes-dialog-title">
-            {this.state.currentVehicle
-              ? "Notes for " + this.state.currentVehicle.description
+            {this.state.selectionList.length === 1
+              ? "Vehicle " +
+              this.state.selectionList[0].vehicleId +
+              " - " +
+              this.state.selectionList[0].description
               : ""}
           </DialogTitle>
           <DialogContent dividers>
-            <Typography gutterBottom>
-              {this.state.currentVehicle ? this.state.currentVehicle.notes : ""}
+            <Typography gutterBottom sx={{ whiteSpace: "pre-wrap" }}>
+              <div>
+                <h3>
+                  Notes
+                </h3><br />
+                <p>
+                  {
+                    this.state.selectionList.length === 1 ?
+                      this.state.selectionList[0].notes :
+                      ''
+                  }
+                </p>
+              </div>
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={this.closeNotes}>
+            <Button autoFocus onClick={this.closeDetails}>
               Close
             </Button>
           </DialogActions>
