@@ -55,16 +55,6 @@ class TaskList extends Component {
   }
 
   async remove(list) {
-    // await fetch(`/api/tasks/${id}`, {
-    //   method: "DELETE",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //   },
-    // }).then(() => {
-    //   let updatedTasks = [...this.state.tasks].filter((i) => i.taskId !== id);
-    //   this.setState({ tasks: updatedTasks });
-    // });
     await fetch(`/api/tasks/delete-tasks`, {
       method: "POST",
       headers: {
@@ -74,11 +64,11 @@ class TaskList extends Component {
       body: JSON.stringify(list),
     });
     this.props.history.push("/tasks");
-    this.setState({tasks: this.state.tasks.filter(task => !list.includes(task))})
+    this.setState({ tasks: this.state.tasks.filter(task => !list.includes(task)) })
   }
 
   updateSelectionList(list) {
-    const taskList = list.map( id => this.state.tasks.find(task => task.taskId === id))
+    const taskList = list.map(id => this.state.tasks.find(task => task.taskId === id))
     this.setState({ selectionList: taskList });
   }
 
@@ -129,156 +119,43 @@ class TaskList extends Component {
       return <p>Loading...</p>;
     }
 
-    // const taskList = tasks.map((task) => {
-    //   return (
-    //     <TableRow key={task.taskId}>
-    //       <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
-    //         <Checkbox></Checkbox>
-    //         <a href={"/tasks/" + task.taskId}>{task.taskId}</a>
-    //       </TableCell>
-    //       <TableCell>{task.description}</TableCell>
-    //       <TableCell>{task.type.value}</TableCell>
-    //       <TableCell>
-    //         {task.vehicle.vehicleId + ": " + task.vehicle.description}
-    //       </TableCell>
-    //       <TableCell>{task.dateEntered}</TableCell>
-    //       <TableCell>{task.dateDue}</TableCell>
-    //       <TableCell>
-    //         <IconButton
-    //           onClick={() => this.displayDetails(task, "INSTRUCTIONS")}
-    //         >
-    //           <DescriptionIcon />
-    //         </IconButton>
-    //       </TableCell>
-    //       <TableCell>
-    //         <IconButton onClick={() => this.displayDetails(task, "NOTES")}>
-    //           <DescriptionIcon />
-    //         </IconButton>
-    //       </TableCell>
-    //       <TableCell>
-    //         <ButtonGroup>
-    //           <IconButton
-    //             color="success"
-    //             component={Link}
-    //             to={"/tasks/" + task.taskId}
-    //           >
-    //             <ModeEditIcon />
-    //           </IconButton>
-    //           <IconButton color="error" onClick={() => this.handleDelete(task)}>
-    //             <DeleteForeverIcon />
-    //           </IconButton>
-    //         </ButtonGroup>
-    //       </TableCell>
-    //     </TableRow>
-    //   );
-    // });
-
     return (
       <div>
         <AppNavbar />
-        <Container fluid="true">
+        <Container fluid="true" sx={{ marginTop: "5px" }}>
           <Stack direction="column" spacing={2}>
-            <Stack direction="row">
-              <h3>Tasks</h3>
-              <IconButton color="success" component={Link} to="/tasks/new">
-                <PersonAddAlt1Icon />
-              </IconButton>
-            </Stack>
-              <TaskGrid
-                tasks={this.state.tasks}
-                density="compact"
-                updateSelectionList={this.updateSelectionList}
-              />
+            <h1>Tasks</h1>
+            <TaskGrid
+              tasks={this.state.tasks}
+              density="compact"
+              updateSelectionList={this.updateSelectionList}
+            />
             <Stack direction="row" spacing={1}>
-                <Fab size="medium" 
-                  component={Link} 
-                  to="/tasks/new">
-                  <AddIcon/>
-                </Fab>
-                <Fab size="medium" 
-                  component={Link}
-                  to={this.state.selectionList.length > 0 ? "/tasks/" + this.state.selectionList[0].taskId : ''}
-                  disabled={this.state.selectionList.length != 1}
-                  >
-                  <EditIcon/>
-                </Fab>
-                <Fab size="medium" 
-                  onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
-                  disabled={this.state.selectionList.length !== 1}
-                  >
-                  <DescriptionIcon/>
-                </Fab>
-                <Fab size="medium" 
-                  onClick={this.handleDelete}
-                  disabled={this.state.selectionList.length < 1} 
-                  >
-                  <DeleteForeverIcon/>
-                </Fab>
-            </Stack>
-            {/* Replacing with above fabs 
-            <ButtonGroup>
-              <Button
-                disabled={this.state.selectionList.length != 1}
-                color="secondary"
-                variant="contained"
+              <Fab size="medium"
+                component={Link}
+                to="/tasks/new">
+                <AddIcon />
+              </Fab>
+              <Fab size="medium"
                 component={Link}
                 to={this.state.selectionList.length > 0 ? "/tasks/" + this.state.selectionList[0].taskId : ''}
+                disabled={this.state.selectionList.length != 1}
               >
-                Edit
-              </Button>
-              <Button 
-                color="error" 
-                variant="contained" 
-                disabled={this.state.selectionList.length < 1} 
-                onClick={this.handleDelete}
-                >
-                Delete
-              </Button>
-              <Button 
-                color='secondary'
-                variant='contained'
-                disabled={this.state.selectionList.length !== 1}
+                <EditIcon />
+              </Fab>
+              <Fab size="medium"
                 onClick={() => this.displayDetails(this.state.selectionList[0], 'INSTRUCTIONS')}
-                >
-                Details
-              </Button>
-            </ButtonGroup>
-            */}
-            {/* 
-            Replaced with TaskGrid
-          <TableContainer>
-            <Table className="mt-4">
-              <TableHead>
-                <TableRow>
-                  <TableCell width="15%">
-                    <b>Task ID</b>
-                  </TableCell>
-                  <TableCell width="20%">
-                    <b>Description</b>
-                  </TableCell>
-                  <TableCell width="10%">
-                    <b>Type</b>
-                  </TableCell>
-                  <TableCell width="15%">
-                    <b>Vehicle</b>
-                  </TableCell>
-                  <TableCell width="10%">
-                    <b>Date Entered</b>
-                  </TableCell>
-                  <TableCell width="10%">
-                    <b>Date Due</b>
-                  </TableCell>
-                  <TableCell width="10%">
-                    <b>Instructions</b>
-                  </TableCell>
-                  <TableCell width="10%">
-                    <b>Notes</b>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>{taskList}</TableBody>
-            </Table>
-          </TableContainer> */}
+                disabled={this.state.selectionList.length !== 1}
+              >
+                <DescriptionIcon />
+              </Fab>
+              <Fab size="medium"
+                onClick={this.handleDelete}
+                disabled={this.state.selectionList.length < 1}
+              >
+                <DeleteForeverIcon />
+              </Fab>
+            </Stack>
           </Stack>
         </Container>
         <Dialog
@@ -294,13 +171,13 @@ class TaskList extends Component {
               {this.state.deleteDialogOpen ? (
                 <div>
                   {
-                    this.state.selectionList.map( task => {
+                    this.state.selectionList.map(task => {
                       return (
-                      <p>
-                        Task: {task.taskId} <br />
-                        Description: {task.description} <br />
-                        Vehicle: {task.vehicle.vehicleId}<hr/>
-                      </p>
+                        <p>
+                          Task: {task.taskId} <br />
+                          Description: {task.description} <br />
+                          Vehicle: {task.vehicle.vehicleId}<hr />
+                        </p>
                       )
                     }
                     )
@@ -333,9 +210,9 @@ class TaskList extends Component {
           <DialogTitle id="notes-dialog-title">
             {this.state.selectionList.length === 1
               ? "Task " +
-                this.state.selectionList[0].taskId +
-                " - " +
-                this.state.selectionList[0].description
+              this.state.selectionList[0].taskId +
+              " - " +
+              this.state.selectionList[0].description
               : ""}
           </DialogTitle>
           <DialogContent dividers>
@@ -343,14 +220,14 @@ class TaskList extends Component {
               <div>
                 <h3>
                   Notes
-                </h3><br/>
+                </h3><br />
                 <p>
                   {
-                    this.state.selectionList.length === 1 ? 
+                    this.state.selectionList.length === 1 ?
                       this.state.selectionList[0].notes :
-                        ''
+                      ''
                   }
-                </p><hr/>
+                </p><hr />
                 <h3>
                   Instructions
                 </h3>
@@ -358,7 +235,7 @@ class TaskList extends Component {
                   {
                     this.state.selectionList.length === 1 ?
                       this.state.selectionList[0].instructions :
-                        ''
+                      ''
                   }
                 </p>
               </div>

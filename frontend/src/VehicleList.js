@@ -146,11 +146,9 @@ class VehicleList extends Component {
     return (
       <div>
         <AppNavbar />
-        <Container fluid="true">
+        <Container fluid="true" sx={{ marginTop: "5px" }}>
           <Stack direction="column" spacing={2}>
-            <Stack direction="row">
-              <h3>Vehicles</h3>
-            </Stack>
+            <h1>Vehicles</h1>
             <VehicleGrid
               vehicles={this.state.vehicles}
               density="compact"

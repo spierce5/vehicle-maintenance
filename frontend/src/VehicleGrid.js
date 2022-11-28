@@ -6,13 +6,13 @@ const columns = [
   {
     field: "vehicleId",
     headerName: "Vehicle ID",
-    flex: 0.5,
+    flex: 1,
     editable: false,
   },
   {
     field: "description",
     headerName: "Description",
-    flex: 1.5,
+    flex: 2,
     editable: false,
   },
   {
