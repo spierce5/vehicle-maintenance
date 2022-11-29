@@ -18,7 +18,7 @@ import com.srd2.vehicleMaintenance.Vehicle.Vehicle;
 @Entity
 @Table
 public class Task {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long taskId;
@@ -28,18 +28,18 @@ public class Task {
     private String instructions;
     private String notes;
     @ManyToOne
-    @JoinColumn(name="type_id")
+    @JoinColumn(name = "type_id")
     private TaskType type;
     @ManyToOne
-    @JoinColumn(name="vehicle")
+    @JoinColumn(name = "vehicle")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Vehicle vehicle;
 
-    public Task(){
-        
+    public Task() {
+
     }
 
-    public Task(LocalDate dateEntered, LocalDate dateDue, String description, 
+    public Task(LocalDate dateEntered, LocalDate dateDue, String description,
             TaskType type, Vehicle vehicle) {
         this.dateEntered = dateEntered;
         this.dateDue = dateDue;
@@ -52,6 +52,19 @@ public class Task {
             TaskType type, Vehicle vehicle, String instructions, String notes) {
         this.dateEntered = dateEntered;
         this.dateDue = dateDue;
+        this.description = description;
+        this.instructions = instructions;
+        this.notes = notes;
+        this.type = type;
+        this.vehicle = vehicle;
+    }
+
+    /*
+     * Used for Templates only - no due date
+     */
+    public Task(LocalDate dateEntered, String description,
+            TaskType type, Vehicle vehicle, String instructions, String notes) {
+        this.dateEntered = dateEntered;
         this.description = description;
         this.instructions = instructions;
         this.notes = notes;

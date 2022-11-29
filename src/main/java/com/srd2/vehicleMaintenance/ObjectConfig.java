@@ -18,37 +18,34 @@ import com.srd2.vehicleMaintenance.Vehicle.VehicleRepository;
 public class ObjectConfig {
 
     Vehicle car1 = new Vehicle(
-                "Julie's car",
-                (short)2012,
-                "Nissan",
-                "Altima",
-                "4 door sedan. Squeaky brakes"
-            );
+            "Julie's car",
+            (short) 2012,
+            "Nissan",
+            "Altima",
+            "4 door sedan. Squeaky brakes");
     Vehicle car2 = new Vehicle(
-        "Sam's car",
-        (short)2006,
-        "Jeep",
-        "Liberty",
-        "Does not start"
-    );
+            "Sam's car",
+            (short) 2006,
+            "Jeep",
+            "Liberty",
+            "Does not start");
     Vehicle car3 = new Vehicle(
-        "Red Lexus",
-        (short)2021,
-        "Lexus",
-        "x3",
-        "Unsubstatiated claim that it shakes when driving over 60MPH"
-    );
+            "Red Lexus",
+            (short) 2021,
+            "Lexus",
+            "x3",
+            "Unsubstatiated claim that it shakes when driving over 60MPH");
     Vehicle car4 = new Vehicle(
-        "Old Honda",
-        (short)2012,
-        "Honda",
-        "CR-V",
-        "Not currently insured for driving"
-    );
-    
+            "Old Honda",
+            (short) 2012,
+            "Honda",
+            "CR-V",
+            "Not currently insured for driving");
+
     TaskType type1 = new TaskType("Preventative", "Routine maintenance to prevent mechanical issues", true);
     TaskType type2 = new TaskType("Repair", "Mechanical issue has occurred and needs to be repaired", true);
     TaskType type3 = new TaskType("Enhancement", "Adding new or improved vehicle feature", true);
+    TaskType type4 = new TaskType("Template", "Template for scheduling preventative maintenance", true);
 
     @Bean
     CommandLineRunner vehicleCommandLineRunner(VehicleRepository repository) {
@@ -59,8 +56,8 @@ public class ObjectConfig {
 
     @Bean
     CommandLineRunner taskTypeCommandLineRunner(TaskTypeRepository repository) {
-        return args -> {            
-            repository.saveAll(List.of(type1,type2,type3));
+        return args -> {
+            repository.saveAll(List.of(type1, type2, type3, type4));
         };
     }
 
@@ -68,50 +65,45 @@ public class ObjectConfig {
     CommandLineRunner taskCommandLineRunner(TaskRepository repository) {
         return args -> {
             Task task1 = new Task(
-                LocalDate.now().minusDays(1),
-                LocalDate.now().plusDays(7),
-                "Change Oil",
-                type1,
-                car1,
-                "Jack up car, open oil cap, place drain pan under oil pan, take out drain bolt...",
-                "Use high-mileage oil."
-            );
+                    LocalDate.now().minusDays(1),
+                    LocalDate.now().plusDays(7),
+                    "Change Oil",
+                    type1,
+                    car1,
+                    "Jack up car, open oil cap, place drain pan under oil pan, take out drain bolt...",
+                    "Use high-mileage oil.");
             Task task2 = new Task(
-                LocalDate.now(),
-                LocalDate.now().plusDays(6),
-                "Change Oil",
-                type2,
-                car2,
-                "Jack up car, open oil cap, place drain pan under oil pan, take out drain bolt...",
-                "Use high-mileage oil."
-            );
+                    LocalDate.now(),
+                    LocalDate.now().plusDays(6),
+                    "Change Oil",
+                    type2,
+                    car2,
+                    "Jack up car, open oil cap, place drain pan under oil pan, take out drain bolt...",
+                    "Use high-mileage oil.");
             Task task3 = new Task(
-                LocalDate.now().minusDays(5),
-                LocalDate.now().plusDays(14),
-                "Check Tires",
-                type1,
-                car3,
-                "Check tread, ensure no foreign objects or damage",
-                "None"
-            );
+                    LocalDate.now().minusDays(5),
+                    LocalDate.now().plusDays(14),
+                    "Check Tires",
+                    type1,
+                    car3,
+                    "Check tread, ensure no foreign objects or damage",
+                    "None");
             Task task4 = new Task(
-                LocalDate.now().minusDays(3),
-                LocalDate.now().plusDays(8),
-                "Replace Axel",
-                type2,
-                car4,
-                "1. Watch YouTube\n2. Make repair",
-                "Major damage to axel, needs immediate repair"
-            );
+                    LocalDate.now().minusDays(3),
+                    LocalDate.now().plusDays(8),
+                    "Replace Axel",
+                    type2,
+                    car4,
+                    "1. Watch YouTube\n2. Make repair",
+                    "Major damage to axel, needs immediate repair");
             Task task5 = new Task(
-                LocalDate.now().minusDays(9),
-                LocalDate.now().plusDays(12),
-                "Add Turbo",
-                type3,
-                car1,
-                "1. Watch YouTube\n2. Make repair",
-                "Major damage to axel, needs immediate repair"
-            );
+                    LocalDate.now().minusDays(9),
+                    LocalDate.now().plusDays(12),
+                    "Add Turbo",
+                    type3,
+                    car1,
+                    "1. Watch YouTube\n2. Make repair",
+                    "Major damage to axel, needs immediate repair");
 
             repository.saveAll(List.of(task1, task2, task3, task4, task5));
         };

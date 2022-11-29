@@ -160,6 +160,7 @@ class VehicleEdit extends Component {
                   variant="outlined"
                   name="dateDue"
                   id="dateDue"
+                  disabled={item.type.value === "Template"}
                   value={item.dateDue || ""}
                   onChange={this.handleChange}
                 />
