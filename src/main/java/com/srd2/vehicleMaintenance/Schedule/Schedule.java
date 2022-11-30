@@ -22,10 +22,10 @@ public class Schedule {
     private Integer frequency;
     private Boolean active;
     @ManyToOne
-    @JoinColumn(name="unit_id")
-    private TimeUnit unitId;
+    @JoinColumn(name = "unit_id")
+    private TimeUnit timeUnit;
     @ManyToOne
-    @JoinColumn(name="task_id")
+    @JoinColumn(name = "task_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Task task;
 
@@ -33,14 +33,14 @@ public class Schedule {
 
     }
 
-    public Schedule(Integer frequency, Boolean active, TimeUnit unitId, Task task) {
+    public Schedule(Integer frequency, Boolean active, TimeUnit timeUnit, Task task) {
         this.frequency = frequency;
         this.active = active;
-        this.unitId = unitId;
+        this.timeUnit = timeUnit;
         this.task = task;
     }
-    
-    public Long getSched_id() {
+
+    public Long getSchedId() {
         return schedId;
     }
 
@@ -60,12 +60,12 @@ public class Schedule {
         this.active = active;
     }
 
-    public TimeUnit getUnitId() {
-        return unitId;
+    public TimeUnit getTimeUnit() {
+        return timeUnit;
     }
 
-    public void setUnitId(TimeUnit unitId) {
-        this.unitId = unitId;
+    public void setTimeUnit(TimeUnit timeUnit) {
+        this.timeUnit = timeUnit;
     }
 
     public Task getTask() {
@@ -75,5 +75,5 @@ public class Schedule {
     public void setTask(Task task) {
         this.task = task;
     }
-    
+
 }
