@@ -24,12 +24,6 @@ const columns = [
     editable: false,
   },
   {
-    field: "timeUnit",
-    headerName: "Time Units",
-    flex: 0.5,
-    editable: false,
-  },
-  {
     field: "active",
     headerName: "Active",
     description: "This column has a value getter and is not sortable.",
@@ -42,9 +36,8 @@ const getRows = (schedules) => {
     return {
       id: schedule.schedId,
       schedId: schedule.schedId,
-      frequency: schedule.frequency,
-      timeUnit: schedule.timeUnit.value,
-      active: schedule.active,
+      frequency: "Every " + schedule.frequency + " " + schedule.timeUnit.value.toLowerCase() + "(s)",
+      active: schedule.active.toString().toUpperCase(),
       task: schedule.task.description
     };
   });

@@ -29,6 +29,10 @@ public class Schedule {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Task task;
 
+    /*
+     * TODO:: Need Last Execution, Next Execution
+     */
+
     public Schedule() {
 
     }
