@@ -8,9 +8,7 @@ import VehicleEdit from "./VehicleEdit";
 import TaskList from "./TaskList";
 import TaskEdit from "./TaskEdit";
 import Options from "./Options";
-
-import { purple } from "@mui/material/colors";
-import Button from "@mui/material/Button";
+import ScheduleList from "./ScheduleList";
 
 const theme = createTheme({
   palette: {
@@ -36,6 +34,7 @@ class App extends Component {
             <Route path="/tasks" exact component={TaskList} />
             <Route path="/tasks/:id" exact component={TaskEdit} />
             <Route path="/options" exact component={Options} />
+            <Route path="/schedules" exact component={ScheduleList} />
           </Switch>
         </Router>
       </ThemeProvider>

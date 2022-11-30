@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import "./App.css";
 import "./Home.css";
 import AppNavbar from "./AppNavbar";
@@ -48,7 +48,7 @@ class Home extends Component {
         <AppNavbar className="header" />
         <Tooltip title="Vehicles" placement="bottom-start"><OvalButton id="vehicle-button" component={Link} to="/vehicles"><DirectionsCarIcon fontSize="large" className="icon" /></OvalButton></Tooltip>
         <Tooltip title="Maintenance Tasks" placement="bottom-start"><OvalButton id="task-button" component={Link} to="/tasks"><AssignmentIcon fontSize="large" className="icon" /></OvalButton></Tooltip>
-        <Tooltip title="Schedules" placement="bottom-start"><OvalButton id="schedule-button" ><CalendarMonthIcon fontSize="large" className="icon" /></OvalButton></Tooltip>
+        <Tooltip title="Schedules" placement="bottom-start"><OvalButton id="schedule-button" component={Link} to="/schedules"><CalendarMonthIcon fontSize="large" className="icon" /></OvalButton></Tooltip>
       </div>
     );
   }

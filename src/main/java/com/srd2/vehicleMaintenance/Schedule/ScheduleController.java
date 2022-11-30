@@ -44,6 +44,13 @@ public class ScheduleController {
         scheduleService.deleteSchedule(schedId);
     }
 
+    @PostMapping(path = "delete-schedules")
+    public void deleteMultipleSchedules(@RequestBody List<Schedule> scheduleList) {
+        for (Schedule schedule : scheduleList) {
+            scheduleService.deleteSchedule(schedule.getSchedId());
+        }
+    }
+
     @PutMapping(path = "{schedId}")
     public ResponseEntity<?> updateTimeUnit(
             @PathVariable("schedId") Long schedId,
