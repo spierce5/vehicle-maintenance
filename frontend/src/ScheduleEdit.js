@@ -7,32 +7,21 @@ import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
 
-class TaskEdit extends Component {
+class ScheduleEdit extends Component {
   emptyItem = {
-    taskId: "",
-    description: "",
-    dateEntered: null,
-    dateDue: null,
-    instructions: "",
-    notes: "",
-    type: {
-      typeId: "",
-    },
-    vehicle: {
-      vehicleId: "",
-      description: "",
-      year: "",
-      make: "",
-      model: "",
-    },
+    schedId: "",
+    frequency: 0,
+    active: false,
+    timeUnit: '',
+    task: "",
   };
 
   constructor(props) {
     super(props);
     this.state = {
       item: this.emptyItem,
-      vehicles: [],
-      taskTypes: [],
+      tasks: [],
+      timeUnits: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -41,17 +30,17 @@ class TaskEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== "new") {
-      const task = await (
-        await fetch(`/api/tasks/${this.props.match.params.id}`)
+      const schedule = await (
+        await fetch(`/api/schedules/${this.props.match.params.id}`)
       ).json();
-      this.setState({ item: task });
+      this.setState({ item: schedule });
     }
-    fetch("/api/vehicles")
+    fetch("/api/tasks")
       .then((response) => response.json())
-      .then((data) => this.setState({ vehicles: data }));
-    fetch("/api/task-types")
+      .then((data) => this.setState({ tasks: data }));
+    fetch("/api/time-units")
       .then((response) => response.json())
-      .then((data) => this.setState({ taskTypes: data }));
+      .then((data) => this.setState({ timeUnits: data }));
   }
 
   handleChange(event) {
@@ -64,22 +53,22 @@ class TaskEdit extends Component {
   }
 
   handleSelectChange = (event, field) => {
-    if (field === "VEHICLE") {
-      const { vehicles } = this.state;
-      const selectedVehicle = vehicles.filter(function (v) {
-        return v.vehicleId === event.target.value;
+    if (field === "TASK") {
+      const { tasks } = this.state;
+      const selectedTask = tasks.filter(function (t) {
+        return t.taskId === event.target.value;
       })[0];
       let item = { ...this.state.item };
-      item["vehicle"] = selectedVehicle;
+      item["task"] = selectedTask;
       this.setState({ item });
     }
-    if (field === "TASKTYPE") {
-      const { taskTypes } = this.state;
-      const selectedVehicle = taskTypes.filter(function (t) {
-        return t.typeId === event.target.value;
+    if (field === "TIMEUNIT") {
+      const { timeUnits } = this.state;
+      const selectedTimeUnit = timeUnits.filter(function (t) {
+        return t.unitId === event.target.value;
       })[0];
       let item = { ...this.state.item };
-      item["type"] = selectedVehicle;
+      item["timeUnit"] = selectedTimeUnit;
       this.setState({ item });
     }
   };
@@ -87,20 +76,20 @@ class TaskEdit extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     const { item } = this.state;
-    await fetch("/api/tasks" + (item.taskId ? "/" + item.taskId : ""), {
-      method: item.taskId ? "PUT" : "POST",
+    await fetch("/api/schedules" + (item.schedId ? "/" + item.schedId : ""), {
+      method: item.schedId ? "PUT" : "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(item),
     });
-    this.props.history.push("/tasks");
+    this.props.history.push("/schedules");
   }
 
   render() {
     const { item } = this.state;
-    const title = <h2>{item.taskId ? "Edit Task" : "Add Task"}</h2>;
+    const title = <h2>{item.schedId ? "Edit Schedule" : "Add Schedule"}</h2>;
 
     return (
       <div>
@@ -111,57 +100,56 @@ class TaskEdit extends Component {
             <Stack direction="row" spacing={1}>
               <Stack direction="column" spacing={1} sx={{ width: "50%" }}>
                 <TextField
-                  label="Task ID"
+                  label="Schedule ID"
                   variant="outlined"
-                  name="taskId"
-                  id="taskId"
-                  value={item.taskId || ""}
+                  name="schedId"
+                  id="schedId"
+                  value={item.schedId || ""}
                   disabled={true}
-                  sx={{ visibility: item.taskId ? "visible" : "hidden" }}
+                  sx={{ visibility: item.schedId ? "visible" : "hidden" }}
                 />
                 <TextField
-                  label="Description"
+                  label="Frequency"
                   variant="outlined"
-                  name="description"
-                  id="description"
-                  value={item.description || ""}
+                  name="frequency"
+                  id="frequency"
+                  value={item.frequency || ""}
                   onChange={this.handleChange}
                 />
                 <TextField
                   variant="outlined"
-                  id="vehicle"
+                  id="task"
                   select
-                  value={item.vehicle.vehicleId}
-                  label="Vehicle"
-                  onChange={(e) => this.handleSelectChange(e, "VEHICLE")}
+                  value={item.task.taskId}
+                  label="task"
+                  onChange={(e) => this.handleSelectChange(e, "TASK")}
                 >
-                  {this.state.vehicles.map((vehicle) => (
-                    <MenuItem key={vehicle.vehicleId} value={vehicle.vehicleId}>
-                      {vehicle.vehicleId + ": " + vehicle.description}
+                  {this.state.tasks.map((task) => (
+                    <MenuItem key={task.taskId} value={task.taskId}>
+                      {task.taskId + ": " + task.description}
                     </MenuItem>
                   ))}
                 </TextField>
                 <TextField
                   variant="outlined"
-                  id="taskType"
+                  id="timeUnit"
                   select
-                  value={item.type.typeId}
-                  label="Task Type"
-                  onChange={(e) => this.handleSelectChange(e, "TASKTYPE")}
+                  value={item.timeUnit.value}
+                  label="Time Unit"
+                  onChange={(e) => this.handleSelectChange(e, "TIMEUNIT")}
                 >
-                  {this.state.taskTypes.map((type) => (
-                    <MenuItem key={type.typeId} value={type.typeId}>
-                      {type.value}
+                  {this.state.timeUnits.map((unit) => (
+                    <MenuItem key={unit.unitId} value={unit.unitId}>
+                      {unit.value}
                     </MenuItem>
                   ))}
                 </TextField>
                 <TextField
-                  label="Date Due"
+                  label="Active"
                   variant="outlined"
-                  name="dateDue"
-                  id="dateDue"
-                  disabled={item.type.value === "Template"}
-                  value={item.dateDue || ""}
+                  name="active"
+                  id="active"
+                  value={item.active || ""}
                   onChange={this.handleChange}
                 />
               </Stack>
@@ -207,4 +195,4 @@ class TaskEdit extends Component {
     );
   }
 }
-export default withRouter(TaskEdit);
+export default withRouter(ScheduleEdit);

@@ -9,6 +9,7 @@ import TaskList from "./TaskList";
 import TaskEdit from "./TaskEdit";
 import Options from "./Options";
 import ScheduleList from "./ScheduleList";
+import ScheduleEdit from "./ScheduleEdit";
 
 const theme = createTheme({
   palette: {
@@ -35,6 +36,7 @@ class App extends Component {
             <Route path="/tasks/:id" exact component={TaskEdit} />
             <Route path="/options" exact component={Options} />
             <Route path="/schedules" exact component={ScheduleList} />
+            <Route path="/schedules/:id" exact component={ScheduleEdit} />
           </Switch>
         </Router>
       </ThemeProvider>
