@@ -55,7 +55,8 @@ public class ScheduleController {
     public ResponseEntity<?> updateTimeUnit(
             @PathVariable("schedId") Long schedId,
             @RequestBody Schedule schedule) {
-        scheduleService.updateSchedule(schedId, schedule.getFrequency(), schedule.getActive(), schedule.getTimeUnit());
+        scheduleService.updateSchedule(schedId, schedule.getFrequency(), schedule.getActive(), schedule.getTask(),
+                schedule.getTimeUnit());
         return ResponseEntity.ok(schedule);
     }
 }

@@ -1,19 +1,19 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import AppNavbar from "./AppNavbar";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Container from "@mui/material/Container";
-import MenuItem from "@mui/material/MenuItem";
+import { TextField, Button, Stack, Container, MenuItem, FormControlLabel, Checkbox } from "@mui/material";
 
 class ScheduleEdit extends Component {
   emptyItem = {
     schedId: "",
     frequency: 0,
     active: false,
-    timeUnit: '',
-    task: "",
+    timeUnit: {
+      unitId: 1
+    },
+    task: {
+      taskId: 1
+    },
   };
 
   constructor(props) {
@@ -24,6 +24,7 @@ class ScheduleEdit extends Component {
       timeUnits: [],
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -34,10 +35,14 @@ class ScheduleEdit extends Component {
         await fetch(`/api/schedules/${this.props.match.params.id}`)
       ).json();
       this.setState({ item: schedule });
+      console.log(schedule)
     }
     fetch("/api/tasks")
       .then((response) => response.json())
-      .then((data) => this.setState({ tasks: data }));
+      .then((data) => {
+        data = data.filter((task) => task.type.value === 'Template')
+        this.setState({ tasks: data })
+      });
     fetch("/api/time-units")
       .then((response) => response.json())
       .then((data) => this.setState({ timeUnits: data }));
@@ -49,7 +54,13 @@ class ScheduleEdit extends Component {
     const name = target.name;
     let item = { ...this.state.item };
     item[name] = value;
-    this.setState({ item });
+    this.setState({ item: item });
+  }
+
+  handleCheck() {
+    let currentItem = { ...this.state.item };
+    currentItem["active"] = !this.state.item.active;
+    this.setState({ item: currentItem });
   }
 
   handleSelectChange = (event, field) => {
@@ -60,7 +71,7 @@ class ScheduleEdit extends Component {
       })[0];
       let item = { ...this.state.item };
       item["task"] = selectedTask;
-      this.setState({ item });
+      this.setState({ item: item });
     }
     if (field === "TIMEUNIT") {
       const { timeUnits } = this.state;
@@ -69,7 +80,7 @@ class ScheduleEdit extends Component {
       })[0];
       let item = { ...this.state.item };
       item["timeUnit"] = selectedTimeUnit;
-      this.setState({ item });
+      this.setState({ item: item });
     }
   };
 
@@ -94,99 +105,77 @@ class ScheduleEdit extends Component {
     return (
       <div>
         <AppNavbar />
-        <Container maxWidth="md">
+        <Container maxWidth="sm">
           {title}
           <form onSubmit={this.handleSubmit}>
-            <Stack direction="row" spacing={1}>
-              <Stack direction="column" spacing={1} sx={{ width: "50%" }}>
-                <TextField
-                  label="Schedule ID"
+            <Stack direction="column" spacing={1}>
+              <TextField
+                label="Schedule ID"
+                variant="outlined"
+                name="schedId"
+                id="schedId"
+                value={item.schedId || ""}
+                disabled={true}
+                sx={{ visibility: item.schedId ? "visible" : "hidden" }}
+              />
+              <TextField
+                label="Frequency"
+                variant="outlined"
+                name="frequency"
+                id="frequency"
+                value={item.frequency || ""}
+                onChange={this.handleChange}
+              />
+              <TextField
+                variant="outlined"
+                id="task"
+                select
+                value={item.task.taskId}
+                label="Task"
+                onChange={(e) => this.handleSelectChange(e, "TASK")}
+              >
+                {this.state.tasks.map((task) => (
+                  <MenuItem key={task.taskId} value={task.taskId}>
+                    {task.taskId + ": " + task.description}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
+                variant="outlined"
+                id="timeUnit"
+                select
+                value={item.timeUnit.unitId}
+                label="Time Unit"
+                onChange={(e) => this.handleSelectChange(e, "TIMEUNIT")}
+              >
+                {this.state.timeUnits.map((unit) => (
+                  <MenuItem key={unit.unitId} value={unit.unitId}>
+                    {unit.value}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={item.active}
+                    onChange={this.handleCheck}
+                  />
+                }
+                label="Active"
+                name="active"
+              />
+              <Stack direction="row" spacing={1}>
+                <Button color="primary" variant="outlined" type="submit">
+                  Save
+                </Button>{" "}
+                <Button
+                  color="secondary"
                   variant="outlined"
-                  name="schedId"
-                  id="schedId"
-                  value={item.schedId || ""}
-                  disabled={true}
-                  sx={{ visibility: item.schedId ? "visible" : "hidden" }}
-                />
-                <TextField
-                  label="Frequency"
-                  variant="outlined"
-                  name="frequency"
-                  id="frequency"
-                  value={item.frequency || ""}
-                  onChange={this.handleChange}
-                />
-                <TextField
-                  variant="outlined"
-                  id="task"
-                  select
-                  value={item.task.taskId}
-                  label="task"
-                  onChange={(e) => this.handleSelectChange(e, "TASK")}
+                  component={Link}
+                  to="/schedules"
                 >
-                  {this.state.tasks.map((task) => (
-                    <MenuItem key={task.taskId} value={task.taskId}>
-                      {task.taskId + ": " + task.description}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  variant="outlined"
-                  id="timeUnit"
-                  select
-                  value={item.timeUnit.value}
-                  label="Time Unit"
-                  onChange={(e) => this.handleSelectChange(e, "TIMEUNIT")}
-                >
-                  {this.state.timeUnits.map((unit) => (
-                    <MenuItem key={unit.unitId} value={unit.unitId}>
-                      {unit.value}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  label="Active"
-                  variant="outlined"
-                  name="active"
-                  id="active"
-                  value={item.active || ""}
-                  onChange={this.handleChange}
-                />
-              </Stack>
-              <Stack direction="column" spacing={1} sx={{ width: "50%" }}>
-                <TextField
-                  label="Instructions"
-                  variant="outlined"
-                  name="instructions"
-                  multiline={true}
-                  minRows="5"
-                  id="instructions"
-                  value={item.instructions || ""}
-                  onChange={this.handleChange}
-                />
-                <TextField
-                  label="Notes"
-                  variant="outlined"
-                  name="notes"
-                  multiline={true}
-                  minRows="5"
-                  id="notes"
-                  value={item.notes || ""}
-                  onChange={this.handleChange}
-                />
-                <Stack direction="row" spacing={1}>
-                  <Button color="primary" variant="outlined" type="submit">
-                    Save
-                  </Button>{" "}
-                  <Button
-                    color="secondary"
-                    variant="outlined"
-                    component={Link}
-                    to="/tasks"
-                  >
-                    Cancel
-                  </Button>
-                </Stack>
+                  Cancel
+                </Button>
               </Stack>
             </Stack>
           </form>

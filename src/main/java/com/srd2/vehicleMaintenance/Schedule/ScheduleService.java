@@ -9,6 +9,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.srd2.vehicleMaintenance.Task.Task;
+
 @Service
 public class ScheduleService {
 
@@ -47,7 +49,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void updateSchedule(Long schedId, Integer frequency, Boolean active, TimeUnit timeUnit) {
+    public void updateSchedule(Long schedId, Integer frequency, Boolean active, Task task, TimeUnit timeUnit) {
         Schedule schedule = scheduleRepository.findById(schedId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Schedule with ID " + schedId + " does not exist"));
@@ -60,6 +62,16 @@ public class ScheduleService {
         if (active != null &&
                 !Objects.equals(schedule.getActive(), active)) {
             schedule.setActive(active);
+        }
+        if (task != null &&
+                !Objects.equals(schedule.getTask(), task)) {
+            if (Objects.equals(task.getType().getValue(), "Template")) {
+                schedule.setTask(task);
+            } else {
+                throw new IllegalStateException(
+                        "Task must have type Template to be scheduled. The type for the given task was "
+                                + task.getType().getValue());
+            }
         }
         if (timeUnit != null &&
                 !Objects.equals(schedule.getTimeUnit(), timeUnit)) {
