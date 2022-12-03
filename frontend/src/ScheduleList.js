@@ -48,7 +48,7 @@ class TaskList extends Component {
       body: JSON.stringify(list),
     });
     this.props.history.push("/schedules");
-    this.setState({ tasks: this.state.schedules.filter(schedule => !list.includes(schedule)) })
+    this.setState({ schedules: this.state.schedules.filter(schedule => !list.includes(schedule)) })
   }
 
   updateSelectionList(list) {
@@ -157,9 +157,6 @@ class TaskList extends Component {
                     }
                     )
                   }
-                  <p style={{ color: "red" }}>
-                    <b>Warning! All schedules for the selected tasks will be deleted.</b>
-                  </p>
                 </div>
               ) : (
                 ""

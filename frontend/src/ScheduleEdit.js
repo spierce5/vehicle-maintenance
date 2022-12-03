@@ -50,7 +50,7 @@ class ScheduleEdit extends Component {
 
   handleChange(event) {
     const target = event.target;
-    const value = target.value;
+    let value = target.value;
     const name = target.name;
     let item = { ...this.state.item };
     item[name] = value;
@@ -119,17 +119,10 @@ class ScheduleEdit extends Component {
                 sx={{ visibility: item.schedId ? "visible" : "hidden" }}
               />
               <TextField
-                label="Frequency"
-                variant="outlined"
-                name="frequency"
-                id="frequency"
-                value={item.frequency || ""}
-                onChange={this.handleChange}
-              />
-              <TextField
                 variant="outlined"
                 id="task"
                 select
+                required={true}
                 value={item.task.taskId}
                 label="Task"
                 onChange={(e) => this.handleSelectChange(e, "TASK")}
@@ -140,20 +133,34 @@ class ScheduleEdit extends Component {
                   </MenuItem>
                 ))}
               </TextField>
-              <TextField
-                variant="outlined"
-                id="timeUnit"
-                select
-                value={item.timeUnit.unitId}
-                label="Time Unit"
-                onChange={(e) => this.handleSelectChange(e, "TIMEUNIT")}
-              >
-                {this.state.timeUnits.map((unit) => (
-                  <MenuItem key={unit.unitId} value={unit.unitId}>
-                    {unit.value}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  label="Frequency"
+                  variant="outlined"
+                  name="frequency"
+                  id="frequency"
+                  type="number"
+                  required={true}
+                  inputProps={{ pattern: '[1]*' }}
+                  value={item.frequency || ""}
+                  onChange={this.handleChange}
+                />
+                <TextField
+                  variant="outlined"
+                  id="timeUnit"
+                  select
+                  required={true}
+                  value={item.timeUnit.unitId}
+                  label="Time Unit"
+                  onChange={(e) => this.handleSelectChange(e, "TIMEUNIT")}
+                >
+                  {this.state.timeUnits.map((unit) => (
+                    <MenuItem key={unit.unitId} value={unit.unitId}>
+                      {unit.value}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Stack>
               <FormControlLabel
                 control={
                   <Checkbox
