@@ -25,6 +25,10 @@ public class ScheduleService {
         return scheduleRepository.findAll();
     }
 
+    public List<Schedule> getDueSchedules() {
+        return scheduleRepository.findByActiveTrue();
+    }
+
     public Optional<Schedule> getScheduleById(Long schedId) {
         return scheduleRepository.findById(schedId);
     }

@@ -29,6 +29,10 @@ public class ScheduleController {
         return scheduleService.getSchedules();
     }
 
+    public List<Schedule> getDueSchedules() {
+        return scheduleService.getDueSchedules();
+    }
+
     @GetMapping(path = "{schedId}")
     public Schedule getTimeUnit(@PathVariable Long schedId) {
         return scheduleService.getScheduleById(schedId).orElseThrow(RuntimeException::new);
