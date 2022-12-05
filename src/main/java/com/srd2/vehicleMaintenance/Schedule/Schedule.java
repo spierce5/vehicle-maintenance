@@ -1,5 +1,8 @@
 package com.srd2.vehicleMaintenance.Schedule;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +24,10 @@ public class Schedule {
     private Long schedId;
     private Integer frequency;
     private Boolean active;
+    private LocalDate lastExecutionDate;
+    private LocalTime lastExecutionTime;
+    private LocalDate nextExecutionDate;
+    private LocalTime nextExecutionTime;
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private TimeUnit timeUnit;
@@ -37,11 +44,16 @@ public class Schedule {
 
     }
 
-    public Schedule(Integer frequency, Boolean active, TimeUnit timeUnit, Task task) {
+    public Schedule(Integer frequency, Boolean active, TimeUnit timeUnit, Task task, LocalDate nextExecutionDate,
+            LocalTime nextExecutionTime) {
         this.frequency = frequency;
         this.active = active;
         this.timeUnit = timeUnit;
         this.task = task;
+        this.lastExecutionDate = null;
+        this.lastExecutionTime = null;
+        this.nextExecutionDate = nextExecutionDate;
+        this.nextExecutionTime = nextExecutionTime;
     }
 
     public Long getSchedId() {
@@ -78,6 +90,38 @@ public class Schedule {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    public LocalDate getLastExecutionDate() {
+        return lastExecutionDate;
+    }
+
+    public void setLastExecutionDate(LocalDate lastExecutionDate) {
+        this.lastExecutionDate = lastExecutionDate;
+    }
+
+    public LocalTime getLastExecutionTime() {
+        return lastExecutionTime;
+    }
+
+    public void setLastExecutionTime(LocalTime lastExecutionTime) {
+        this.lastExecutionTime = lastExecutionTime;
+    }
+
+    public LocalDate getNextExecutionDate() {
+        return nextExecutionDate;
+    }
+
+    public void setNextExecutionDate(LocalDate nextExecutionDate) {
+        this.nextExecutionDate = nextExecutionDate;
+    }
+
+    public LocalTime getNextExecutionTime() {
+        return nextExecutionTime;
+    }
+
+    public void setNextExecutionTime(LocalTime nextExecutionTime) {
+        this.nextExecutionTime = nextExecutionTime;
     }
 
 }

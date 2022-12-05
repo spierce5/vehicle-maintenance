@@ -1,5 +1,7 @@
 package com.srd2.vehicleMaintenance.Schedule;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -53,7 +55,8 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void updateSchedule(Long schedId, Integer frequency, Boolean active, Task task, TimeUnit timeUnit) {
+    public void updateSchedule(Long schedId, Integer frequency, Boolean active, Task task, TimeUnit timeUnit,
+            LocalDate nextExecutionDate, LocalTime nextExecutionTime) {
         Schedule schedule = scheduleRepository.findById(schedId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Schedule with ID " + schedId + " does not exist"));
@@ -80,6 +83,16 @@ public class ScheduleService {
         if (timeUnit != null &&
                 !Objects.equals(schedule.getTimeUnit(), timeUnit)) {
             schedule.setTimeUnit(timeUnit);
+        }
+        if (nextExecutionDate != null &&
+                !Objects.equals(schedule.getNextExecutionDate(), nextExecutionDate) &&
+                nextExecutionDate.isAfter(LocalDate.now())) {
+            schedule.setNextExecutionDate(nextExecutionDate);
+        }
+        if (nextExecutionTime != null &&
+                !Objects.equals(schedule.getNextExecutionTime(), nextExecutionTime) &&
+                nextExecutionTime.isAfter(schedule.getNextExecutionTime())) {
+            schedule.setNextExecutionTime(nextExecutionTime);
         }
 
     }

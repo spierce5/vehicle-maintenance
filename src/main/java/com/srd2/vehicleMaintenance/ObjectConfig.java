@@ -1,6 +1,7 @@
 package com.srd2.vehicleMaintenance;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
@@ -150,12 +151,16 @@ public class ObjectConfig {
                                         6,
                                         true,
                                         month,
-                                        template1);
+                                        template1,
+                                        LocalDate.now(),
+                                        LocalTime.now());
                         Schedule sched2 = new Schedule(
                                         2,
                                         true,
                                         week,
-                                        template2);
+                                        template2,
+                                        LocalDate.now(),
+                                        LocalTime.now());
 
                         repository.saveAll(List.of(sched1, sched2));
                 };

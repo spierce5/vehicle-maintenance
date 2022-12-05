@@ -60,7 +60,7 @@ public class ScheduleController {
             @PathVariable("schedId") Long schedId,
             @RequestBody Schedule schedule) {
         scheduleService.updateSchedule(schedId, schedule.getFrequency(), schedule.getActive(), schedule.getTask(),
-                schedule.getTimeUnit());
+                schedule.getTimeUnit(), schedule.getNextExecutionDate(), schedule.getNextExecutionTime());
         return ResponseEntity.ok(schedule);
     }
 }
