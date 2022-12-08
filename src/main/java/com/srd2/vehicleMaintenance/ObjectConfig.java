@@ -98,7 +98,7 @@ public class ObjectConfig {
         Task task5 = new Task(
                         LocalDate.now().minusDays(9),
                         LocalDate.now().plusDays(12),
-                        false,
+                        true,
                         "Add Turbo",
                         type3,
                         car1,

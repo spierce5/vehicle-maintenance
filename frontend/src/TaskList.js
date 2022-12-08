@@ -1,28 +1,21 @@
 import React, { Component } from "react";
 import {
   Stack,
-  ButtonGroup,
   Container,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  Checkbox,
-  TableBody,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContentText,
   DialogContent,
   DialogActions,
   Button,
+  FormControl,
+  Select,
+  MenuItem,
   Fab,
   Tooltip,
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import AddIcon from "@mui/icons-material/Add"
 import EditIcon from "@mui/icons-material/Edit"
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -40,6 +33,7 @@ class TaskList extends Component {
       currentTask: null,
       detailsOpen: false,
       detailType: "NOTES",
+      statusSelection: 'active'
     };
     this.remove = this.remove.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
@@ -47,12 +41,33 @@ class TaskList extends Component {
     this.displayDetails = this.displayDetails.bind(this);
     this.closeDetails = this.closeDetails.bind(this);
     this.updateSelectionList = this.updateSelectionList.bind(this);
+    this.updateStatusSelection = this.updateStatusSelection.bind(this);
   }
 
   componentDidMount() {
+    this.fetchTasks()
+    // fetch("/api/tasks")
+    //   .then((response) => response.json())
+    //   .then((data) => this.setState({ tasks: data }));
+  }
+
+  fetchTasks() {
     fetch("/api/tasks")
       .then((response) => response.json())
-      .then((data) => this.setState({ tasks: data }));
+      .then((data) => {
+        switch (this.state.statusSelection) {
+          case 'active':
+            data = data.filter(task => !task.complete)
+            break;
+          case 'complete':
+            data = data.filter(task => task.complete)
+            break;
+          default:
+            data = data.filter(task => !task.complete)
+        }
+
+        this.setState({ tasks: data })
+      });
   }
 
   async remove(list) {
@@ -71,6 +86,11 @@ class TaskList extends Component {
   updateSelectionList(list) {
     const taskList = list.map(id => this.state.tasks.find(task => task.taskId === id))
     this.setState({ selectionList: taskList });
+  }
+
+  updateStatusSelection(event) {
+    this.setState({ statusSelection: event.target.value })
+    this.fetchTasks()
   }
 
   displayDetails() {
@@ -126,6 +146,16 @@ class TaskList extends Component {
         <Container fluid="true" sx={{ marginTop: "5px" }}>
           <Stack direction="column" spacing={2}>
             <h1>Tasks</h1>
+            <FormControl variant="standard" sx={{ m: 1, maxWidth: "20%" }}>
+              <Select
+                id="complete-select"
+                value={this.state.statusSelection}
+                onChange={(e) => this.updateStatusSelection(e)}
+              >
+                <MenuItem value="active">Active Tasks</MenuItem>
+                <MenuItem value="complete">Completed Tasks</MenuItem>
+              </Select>
+            </FormControl>
             <TaskGrid
               tasks={this.state.tasks}
               density="compact"
