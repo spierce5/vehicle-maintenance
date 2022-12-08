@@ -24,6 +24,7 @@ public class Task {
     private long taskId;
     private LocalDate dateEntered;
     private LocalDate dateDue;
+    private Boolean complete;
     private String description;
     private String instructions;
     private String notes;
@@ -39,19 +40,21 @@ public class Task {
 
     }
 
-    public Task(LocalDate dateEntered, LocalDate dateDue, String description,
+    public Task(LocalDate dateEntered, LocalDate dateDue, Boolean complete, String description,
             TaskType type, Vehicle vehicle) {
         this.dateEntered = dateEntered;
         this.dateDue = dateDue;
+        this.complete = complete;
         this.description = description;
         this.type = type;
         this.vehicle = vehicle;
     }
 
-    public Task(LocalDate dateEntered, LocalDate dateDue, String description,
+    public Task(LocalDate dateEntered, LocalDate dateDue, Boolean complete, String description,
             TaskType type, Vehicle vehicle, String instructions, String notes) {
         this.dateEntered = dateEntered;
         this.dateDue = dateDue;
+        this.complete = complete;
         this.description = description;
         this.instructions = instructions;
         this.notes = notes;
@@ -60,7 +63,7 @@ public class Task {
     }
 
     /*
-     * Used for Templates only - no due date
+     * Used for Templates only - no due date, complete
      */
     public Task(LocalDate dateEntered, String description,
             TaskType type, Vehicle vehicle, String instructions, String notes) {
@@ -130,6 +133,14 @@ public class Task {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public Boolean getComplete() {
+        return complete;
+    }
+
+    public void setComplete(Boolean complete) {
+        this.complete = complete;
     }
 
 }

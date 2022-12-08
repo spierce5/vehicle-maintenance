@@ -62,6 +62,7 @@ public class ObjectConfig {
         Task task1 = new Task(
                         LocalDate.now().minusDays(1),
                         LocalDate.now().plusDays(7),
+                        false,
                         "Change Oil",
                         type1,
                         car1,
@@ -70,6 +71,7 @@ public class ObjectConfig {
         Task task2 = new Task(
                         LocalDate.now(),
                         LocalDate.now().plusDays(6),
+                        false,
                         "Change Oil",
                         type2,
                         car2,
@@ -78,6 +80,7 @@ public class ObjectConfig {
         Task task3 = new Task(
                         LocalDate.now().minusDays(5),
                         LocalDate.now().plusDays(14),
+                        false,
                         "Check Tires",
                         type1,
                         car3,
@@ -86,6 +89,7 @@ public class ObjectConfig {
         Task task4 = new Task(
                         LocalDate.now().minusDays(3),
                         LocalDate.now().plusDays(8),
+                        false,
                         "Replace Axel",
                         type2,
                         car4,
@@ -94,6 +98,7 @@ public class ObjectConfig {
         Task task5 = new Task(
                         LocalDate.now().minusDays(9),
                         LocalDate.now().plusDays(12),
+                        false,
                         "Add Turbo",
                         type3,
                         car1,
