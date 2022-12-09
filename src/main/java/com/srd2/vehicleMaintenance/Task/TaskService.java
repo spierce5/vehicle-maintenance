@@ -55,7 +55,7 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateTask(Long taskId, LocalDate dateEntered, LocalDate dateDue, String description,
+    public void updateTask(Long taskId, LocalDate dateEntered, LocalDate dateDue, Boolean complete, String description,
             TaskType type, Vehicle vehicle, String instructions, String notes) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalStateException(
@@ -70,6 +70,11 @@ public class TaskService {
         if (dateDue != null &&
                 !Objects.equals(task.getDateDue(), dateDue)) {
             task.setDateDue(dateDue);
+        }
+
+        if (complete != null &&
+                !Objects.equals(task.getComplete(), complete)) {
+            task.setComplete(complete);
         }
 
         if (type != null &&

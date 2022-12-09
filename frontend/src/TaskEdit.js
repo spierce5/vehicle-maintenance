@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import AppNavbar from "./AppNavbar";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Container from "@mui/material/Container";
+import { TextField, Button, Stack, Container, FormControlLabel, Checkbox } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 
 class TaskEdit extends Component {
@@ -13,6 +10,7 @@ class TaskEdit extends Component {
     description: "",
     dateEntered: null,
     dateDue: null,
+    complete: false,
     instructions: "",
     notes: "",
     type: {
@@ -37,6 +35,7 @@ class TaskEdit extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCheck = this.handleCheck.bind(this);
   }
 
   async componentDidMount() {
@@ -61,6 +60,12 @@ class TaskEdit extends Component {
     let item = { ...this.state.item };
     item[name] = value;
     this.setState({ item });
+  }
+
+  handleCheck() {
+    let currentItem = { ...this.state.item };
+    currentItem["complete"] = !this.state.item.complete;
+    this.setState({ item: currentItem });
   }
 
   handleSelectChange = (event, field) => {
@@ -163,6 +168,19 @@ class TaskEdit extends Component {
                   disabled={item.type.value === "Template"}
                   value={item.dateDue || ""}
                   onChange={this.handleChange}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={item.complete}
+                      onChange={this.handleCheck}
+                      disabled={item.type.value === 'Template'}
+
+                    />
+                  }
+                  label="Mark As Complete"
+                  name="complete"
+                  sx={{ visibility: item.type.value === 'Template' ? "hidden" : "visible" }}
                 />
               </Stack>
               <Stack direction="column" spacing={1} sx={{ width: "50%" }}>

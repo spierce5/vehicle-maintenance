@@ -46,9 +46,6 @@ class TaskList extends Component {
 
   componentDidMount() {
     this.fetchTasks()
-    // fetch("/api/tasks")
-    //   .then((response) => response.json())
-    //   .then((data) => this.setState({ tasks: data }));
   }
 
   fetchTasks() {
@@ -174,7 +171,7 @@ class TaskList extends Component {
                   <Fab size="medium"
                     component={Link}
                     to={this.state.selectionList.length > 0 ? "/tasks/" + this.state.selectionList[0].taskId : ''}
-                    disabled={this.state.selectionList.length != 1}
+                    disabled={this.state.selectionList.length !== 1}
                   >
                     <EditIcon />
                   </Fab>

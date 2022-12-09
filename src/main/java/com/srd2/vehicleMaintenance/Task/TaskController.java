@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "api/tasks")
 public class TaskController {
-    
+
     private final TaskService taskService;
 
     @Autowired
@@ -25,28 +25,28 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getTasks(){
+    public List<Task> getTasks() {
         return taskService.getTasks();
     }
 
     @GetMapping(path = "{taskId}")
-    public Task getTask(@PathVariable Long taskId){
+    public Task getTask(@PathVariable Long taskId) {
         return taskService.getTaskById(taskId).orElseThrow(RuntimeException::new);
     }
-    
+
     @PostMapping
     public void registerNewTask(@RequestBody Task task) {
         taskService.addNewTask(task);
     }
 
     @DeleteMapping(path = "{taskId}")
-    public void deleteTask(@PathVariable("taskId") Long taskId){
+    public void deleteTask(@PathVariable("taskId") Long taskId) {
         taskService.deleteTask(taskId);
     }
 
     @PostMapping(path = "delete-tasks")
-    public void deleteMultipleTasks(@RequestBody List<Task> taskList){
-        for(Task task: taskList){
+    public void deleteMultipleTasks(@RequestBody List<Task> taskList) {
+        for (Task task : taskList) {
             taskService.deleteTask(task.getTaskId());
         }
     }
@@ -55,7 +55,8 @@ public class TaskController {
     public ResponseEntity<?> updateTask(
             @PathVariable("taskId") Long taskId,
             @RequestBody Task task) {
-        taskService.updateTask(taskId, task.getDateEntered(), task.getDateDue(), task.getDescription(), task.getType(), task.getVehicle(), task.getInstructions(), task.getNotes());
+        taskService.updateTask(taskId, task.getDateEntered(), task.getDateDue(), task.getComplete(),
+                task.getDescription(), task.getType(), task.getVehicle(), task.getInstructions(), task.getNotes());
         return ResponseEntity.ok(task);
     }
 }
