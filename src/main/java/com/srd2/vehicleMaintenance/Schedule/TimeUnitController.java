@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "api/time-units")
 public class TimeUnitController {
-    
+
     private final TimeUnitService timeUnitService;
 
     @Autowired
@@ -25,22 +25,22 @@ public class TimeUnitController {
     }
 
     @GetMapping
-    public List<TimeUnit> getTimeUnits(){
+    public List<TimeUnit> getTimeUnits() {
         return timeUnitService.getTimeUnits();
     }
 
     @GetMapping(path = "{unitId}")
-    public TimeUnit getTimeUnit(@PathVariable Long unitId){
+    public TimeUnit getTimeUnit(@PathVariable Long unitId) {
         return timeUnitService.getTimeUnitById(unitId).orElseThrow(RuntimeException::new);
     }
-    
+
     @PostMapping
     public void registerNewTimeUnit(@RequestBody TimeUnit timeUnit) {
         timeUnitService.addNewTimeUnit(timeUnit);
     }
 
     @DeleteMapping(path = "{unitId}")
-    public void deleteTimeUnit(@PathVariable("unitId") Long unitId){
+    public void deleteTimeUnit(@PathVariable("unitId") Long unitId) {
         timeUnitService.deleteTimeUnit(unitId);
     }
 
@@ -48,7 +48,7 @@ public class TimeUnitController {
     public ResponseEntity<?> updateTimeUnit(
             @PathVariable("unitId") Long unitId,
             @RequestBody TimeUnit timeUnit) {
-        timeUnitService.updateTimeUnit(unitId, timeUnit.getValue(), timeUnit.getDescription(), timeUnit.getHours(), timeUnit.getUnitType());
+        timeUnitService.updateTimeUnit(unitId, timeUnit.getValue(), timeUnit.getDescription(), timeUnit.getDays());
         return ResponseEntity.ok(timeUnit);
     }
 }

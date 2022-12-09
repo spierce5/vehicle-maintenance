@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TaskTypeRepository extends JpaRepository<TaskType, Long>{
-   
+public interface TaskTypeRepository extends JpaRepository<TaskType, Long> {
+
     @Query("SELECT type FROM TaskType type WHERE type.typeId = ?1")
     Optional<TaskType> findTaskTypeById(Long long1);
+
+    public TaskType findTaskByValue(String value);
 }

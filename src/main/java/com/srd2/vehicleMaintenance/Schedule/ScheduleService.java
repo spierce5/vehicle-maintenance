@@ -56,7 +56,7 @@ public class ScheduleService {
 
     @Transactional
     public void updateSchedule(Long schedId, Integer frequency, Boolean active, Task task, TimeUnit timeUnit,
-            LocalDate nextExecutionDate, LocalTime nextExecutionTime) {
+            LocalDate nextExecutionDate, LocalDate lastExecutionDate, LocalTime lastExecutionTime) {
         Schedule schedule = scheduleRepository.findById(schedId)
                 .orElseThrow(() -> new IllegalStateException(
                         "Schedule with ID " + schedId + " does not exist"));
@@ -89,10 +89,15 @@ public class ScheduleService {
                 nextExecutionDate.isAfter(LocalDate.now())) {
             schedule.setNextExecutionDate(nextExecutionDate);
         }
-        if (nextExecutionTime != null &&
-                !Objects.equals(schedule.getNextExecutionTime(), nextExecutionTime) &&
-                nextExecutionTime.isAfter(schedule.getNextExecutionTime())) {
-            schedule.setNextExecutionTime(nextExecutionTime);
+        if (lastExecutionDate != null &&
+                !Objects.equals(schedule.getLastExecutionDate(), lastExecutionDate) &&
+                lastExecutionDate.isAfter(LocalDate.now().minusDays(1))) {
+            schedule.setLastExecutionDate(lastExecutionDate);
+        }
+        if (lastExecutionTime != null &&
+                !Objects.equals(schedule.getLastExecutionTime(), lastExecutionTime) &&
+                lastExecutionTime.isAfter(LocalTime.now().minusMinutes(2))) {
+            schedule.setLastExecutionTime(lastExecutionTime);
         }
 
     }

@@ -52,12 +52,11 @@ public class ObjectConfig {
         TaskType type3 = new TaskType("Enhancement", "Adding new or improved vehicle feature", true);
         TaskType type4 = new TaskType("Template", "Template for scheduling preventative maintenance", true);
 
-        TimeUnit hour = new TimeUnit("HOUR", "N/A", 1, "HOURS");
-        TimeUnit day = new TimeUnit("DAY", "N/A", 24, "DAYS");
-        TimeUnit week = new TimeUnit("WEEK", "N/A", 168, "DAYS");
-        TimeUnit month = new TimeUnit("MONTH", "N/A", 720, "DAYS");
-        TimeUnit quarter = new TimeUnit("QUARTER", "N/A", 2184, "DAYS");
-        TimeUnit year = new TimeUnit("YEAR", "N/A", 8760, "DAYS");
+        TimeUnit day = new TimeUnit("DAY", "N/A", 24);
+        TimeUnit week = new TimeUnit("WEEK", "N/A", 7);
+        TimeUnit month = new TimeUnit("MONTH", "N/A", 30);
+        TimeUnit quarter = new TimeUnit("QUARTER", "N/A", 120);
+        TimeUnit year = new TimeUnit("YEAR", "N/A", 365);
 
         Task task1 = new Task(
                         LocalDate.now().minusDays(1),
@@ -145,7 +144,7 @@ public class ObjectConfig {
         CommandLineRunner timeUnitCommandLineRunner(TimeUnitRepository repository) {
                 return args -> {
 
-                        repository.saveAll(List.of(hour, day, week, month, quarter, year));
+                        repository.saveAll(List.of(day, week, month, quarter, year));
                 };
         }
 
@@ -157,15 +156,13 @@ public class ObjectConfig {
                                         true,
                                         month,
                                         template1,
-                                        LocalDate.now(),
-                                        LocalTime.now());
+                                        LocalDate.now());
                         Schedule sched2 = new Schedule(
                                         2,
                                         true,
                                         week,
                                         template2,
-                                        LocalDate.now(),
-                                        LocalTime.now());
+                                        LocalDate.now());
 
                         repository.saveAll(List.of(sched1, sched2));
                 };

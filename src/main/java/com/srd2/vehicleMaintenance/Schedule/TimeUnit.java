@@ -16,22 +16,21 @@ public class TimeUnit {
     private String value;
     private String description;
     /*
-     * All time units will be defined in hours. This is the smallest reasonable
+     * All time units will be defined in days. This is the smallest reasonable
      * measurement. Unit type will store either days or hours.
      * If unit type is days, the number of days will be converted on the frontend to
      * hours and vice-versa for display.
      */
-    private Integer hours;
+    private Integer days;
     private String unitType;
 
     public TimeUnit() {
     }
 
-    public TimeUnit(String value, String description, Integer hours, String unitType) {
+    public TimeUnit(String value, String description, Integer days) {
         this.value = value;
         this.description = description;
-        this.hours = hours;
-        this.unitType = unitType;
+        this.days = days;
     }
 
     public Long getUnitId() {
@@ -46,36 +45,12 @@ public class TimeUnit {
         this.value = value;
     }
 
-    public Integer getHours() {
-        return hours;
-    }
-
-    public void setHours(Integer hours) {
-        this.hours = hours;
-    }
-
     public Integer getDays() {
-        if (Objects.equals(unitType, "DAYS") &&
-                hours % 24 == 0) {
-            return hours / 24;
-        } else {
-            return -1;
-        }
+        return days;
     }
 
     public void setDays(Integer days) {
-        if (Objects.equals(unitType, "DAYS") &&
-                days > 0) {
-            this.hours = days * 24;
-        }
-    }
-
-    public String getUnitType() {
-        return unitType;
-    }
-
-    public void setUnitType(String unitType) {
-        this.unitType = unitType;
+        this.days = days;
     }
 
     public String getDescription() {

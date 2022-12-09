@@ -27,7 +27,6 @@ public class Schedule {
     private LocalDate lastExecutionDate;
     private LocalTime lastExecutionTime;
     private LocalDate nextExecutionDate;
-    private LocalTime nextExecutionTime;
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private TimeUnit timeUnit;
@@ -36,16 +35,11 @@ public class Schedule {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Task task;
 
-    /*
-     * TODO:: Need Last Execution, Next Execution
-     */
-
     public Schedule() {
 
     }
 
-    public Schedule(Integer frequency, Boolean active, TimeUnit timeUnit, Task task, LocalDate nextExecutionDate,
-            LocalTime nextExecutionTime) {
+    public Schedule(Integer frequency, Boolean active, TimeUnit timeUnit, Task task, LocalDate nextExecutionDate) {
         this.frequency = frequency;
         this.active = active;
         this.timeUnit = timeUnit;
@@ -53,7 +47,6 @@ public class Schedule {
         this.lastExecutionDate = null;
         this.lastExecutionTime = null;
         this.nextExecutionDate = nextExecutionDate;
-        this.nextExecutionTime = nextExecutionTime;
     }
 
     public Long getSchedId() {
@@ -114,14 +107,6 @@ public class Schedule {
 
     public void setNextExecutionDate(LocalDate nextExecutionDate) {
         this.nextExecutionDate = nextExecutionDate;
-    }
-
-    public LocalTime getNextExecutionTime() {
-        return nextExecutionTime;
-    }
-
-    public void setNextExecutionTime(LocalTime nextExecutionTime) {
-        this.nextExecutionTime = nextExecutionTime;
     }
 
 }

@@ -56,11 +56,12 @@ public class ScheduleController {
     }
 
     @PutMapping(path = "{schedId}")
-    public ResponseEntity<?> updateTimeUnit(
+    public ResponseEntity<?> updateSchedule(
             @PathVariable("schedId") Long schedId,
             @RequestBody Schedule schedule) {
         scheduleService.updateSchedule(schedId, schedule.getFrequency(), schedule.getActive(), schedule.getTask(),
-                schedule.getTimeUnit(), schedule.getNextExecutionDate(), schedule.getNextExecutionTime());
+                schedule.getTimeUnit(), schedule.getNextExecutionDate(), schedule.getLastExecutionDate(),
+                schedule.getLastExecutionTime());
         return ResponseEntity.ok(schedule);
     }
 }
