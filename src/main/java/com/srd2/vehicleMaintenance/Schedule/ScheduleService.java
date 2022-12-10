@@ -47,8 +47,8 @@ public class ScheduleService {
         if (schedule.getFrequency() < 1) {
             throw new IllegalStateException("Frequency must be a positive integer");
         }
-        if (schedule.getNextExecutionDate().compareTo(LocalDate.now()) <= 0) {
-            throw new IllegalStateException("Next Execution Date must be in the future");
+        if (schedule.getNextExecutionDate().compareTo(LocalDate.now()) < 0) {
+            throw new IllegalStateException("Next Execution Date cannot be in the past");
         }
         scheduleRepository.save(schedule);
     }
@@ -95,7 +95,7 @@ public class ScheduleService {
         }
         if (nextExecutionDate != null &&
                 !Objects.equals(schedule.getNextExecutionDate(), nextExecutionDate) &&
-                nextExecutionDate.isAfter(LocalDate.now())) {
+                nextExecutionDate.compareTo(LocalDate.now()) >= 0) {
             schedule.setNextExecutionDate(nextExecutionDate);
         }
         if (lastExecutionDate != null &&
