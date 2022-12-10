@@ -41,6 +41,15 @@ public class ScheduleService {
         if (scheduleOptional.isPresent()) {
             throw new IllegalStateException("Schedule ID is taken");
         }
+        if (schedule.getNextExecutionDate() == null) {
+            throw new IllegalStateException("Next Execution Date cannot be null");
+        }
+        if (schedule.getFrequency() < 1) {
+            throw new IllegalStateException("Frequency must be a positive integer");
+        }
+        if (schedule.getNextExecutionDate().compareTo(LocalDate.now()) <= 0) {
+            throw new IllegalStateException("Next Execution Date must be in the future");
+        }
         scheduleRepository.save(schedule);
     }
 

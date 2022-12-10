@@ -8,6 +8,7 @@ class ScheduleEdit extends Component {
     schedId: "",
     frequency: 0,
     active: false,
+    nextExecutionDate: "",
     timeUnit: {
       unitId: 1
     },
@@ -160,6 +161,16 @@ class ScheduleEdit extends Component {
                     </MenuItem>
                   ))}
                 </TextField>
+                <TextField
+                  variant="outlined"
+                  id="nextExecutionDate"
+                  name="nextExecutionDate"
+                  required={true}
+                  helperText="YYYY-MM-DD"
+                  value={item.nextExecutionDate || ""}
+                  label="Next Execution Date"
+                  onChange={this.handleChange}
+                />
               </Stack>
               <FormControlLabel
                 control={
