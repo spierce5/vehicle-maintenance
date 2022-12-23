@@ -8,7 +8,8 @@
   aspect-ratio: 1/1;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -150%)
+  transform: translate(-50%, -150%);
+  -webkit-transform: translate(-50%, -150%);
 }
 
 #task-button {
@@ -16,7 +17,8 @@
   aspect-ratio: 1/1;
   top: 50%;
   left: 50%;
-  transform: translate(-150%, 0%)
+  transform: translate(-150%, 0%);
+  -webkit-transform: translate(-150%, 0%);
 }
 
 #schedule-button {
@@ -24,7 +26,8 @@
   aspect-ratio: 1/1;
   top: 50%;
   left: 50%;
-  transform: translate(50%, 0%)
+  transform: translate(50%, 0%);
+  -webkit-transform: translate(50%, 0%);
 }
 
 .icon {
