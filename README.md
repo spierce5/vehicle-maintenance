@@ -31,3 +31,8 @@ Monitor your schedules.
 
 Select from your task templates and set a frequency for new tasks to be generated. 
 ![edit_schedule.png](frontend/public/Preview/edit_schedule.png?raw=true)
+
+### Options
+
+Configure task types to help categorize your maintenance. 
+![options.png](frontend/public/Preview/options.png?raw=true)
